@@ -10,4 +10,13 @@ export default defineConfig({
         }),
         react(),
     ],
+    server: {
+        host: '0.0.0.0', // Dockerコンテナ外(ブラウザ)からの接続を許可
+        hmr: {
+            host: 'localhost',
+        },
+        watch: {
+            usePolling: true, // Docker内のファイル変更を強制的に検知
+        },
+    },
 });

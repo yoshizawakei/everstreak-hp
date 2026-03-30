@@ -1,22 +1,26 @@
-import defaultTheme from 'tailwindcss/defaultTheme';
-import forms from '@tailwindcss/forms';
-
 /** @type {import('tailwindcss').Config} */
 export default {
     content: [
-        './vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php',
-        './storage/framework/views/*.php',
         './resources/views/**/*.blade.php',
         './resources/js/**/*.jsx',
     ],
-
     theme: {
         extend: {
             fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                serif: ['"Noto Serif JP"', 'serif'],
+            },
+            // 揺らぎ（Fluid）を標準クラスとして登録
+            animation: {
+                'fluid-slow': 'fluid 20s ease-in-out infinite',
+            },
+            keyframes: {
+                fluid: {
+                    '0%, 100%': { borderRadius: '50% 50% 50% 50% / 50% 50% 50% 50%' },
+                    '33%': { borderRadius: '40% 60% 70% 30% / 50% 30% 70% 50%' },
+                    '66%': { borderRadius: '60% 40% 30% 70% / 30% 50% 50% 70%' },
+                },
             },
         },
     },
-
-    plugins: [forms],
+    plugins: [],
 };
