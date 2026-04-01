@@ -16,4 +16,13 @@ class News extends Model
         'is_published',
         'published_at'
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+            'published_at' => 'datetime', // 文字列ではなくCarbonオブジェクトとして扱える
+        ];
+    }
+
 }

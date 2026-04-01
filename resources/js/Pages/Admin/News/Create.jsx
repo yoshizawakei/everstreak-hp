@@ -16,7 +16,9 @@ export default function Create() {
 
     const submit = (e) => {
         e.preventDefault();
-        post(route('admin.news.store'));
+        post(route('admin.news.store'), {
+            onSuccess: () => alert('記事を公開しました'),
+        });
     };
 
     return (
@@ -27,27 +29,27 @@ export default function Create() {
                 </Link>
 
                 <div className="bg-white rounded-[40px] p-12 shadow-sm border border-slate-200">
-                    <div className="flex justify-between items-start mb-10">
-                        <h1 className="text-2xl font-serif text-slate-900">Create News</h1>
-                        <button 
-                            type="button"
-                            onClick={() => setData('is_published', !data.is_published)}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold tracking-widest transition-all ${
-                                data.is_published ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-slate-200 text-slate-500'
-                            }`}
-                        >
-                            {data.is_published ? <><Eye size={14} /> PUBLIC</> : <><EyeOff size={14} /> PRIVATE</>}
-                        </button>
-                    </div>
-                    
                     <form onSubmit={submit} className="space-y-8">
+                        <div className="flex justify-between items-start mb-10">
+                            <h1 className="text-2xl font-serif text-slate-900">Create News</h1>
+                            <button 
+                                type="button"
+                                onClick={() => setData('is_published', !data.is_published)}
+                                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold tracking-widest transition-all ${
+                                    data.is_published ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-slate-200 text-slate-500'
+                                }`}
+                            >
+                                {data.is_published ? <><Eye size={14} /> PUBLIC</> : <><EyeOff size={14} /> PRIVATE</>}
+                            </button>
+                        </div>
+                        
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">Category</label>
                                 <select 
                                     value={data.category}
                                     onChange={e => setData('category', e.target.value)}
-                                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all appearance-none text-sm"
+                                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all text-sm"
                                 >
                                     <option value="Notice">Notice</option>
                                     <option value="Update">Update</option>
@@ -56,7 +58,7 @@ export default function Create() {
                             </div>
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1 flex items-center gap-1">
-                                    <Calendar size={12} /> Release Date (Scheduled)
+                                    <Calendar size={12} /> Release Date
                                 </label>
                                 <input 
                                     type="datetime-local"
@@ -74,9 +76,9 @@ export default function Create() {
                                 value={data.title}
                                 onChange={e => setData('title', e.target.value)}
                                 className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all text-lg font-medium"
-                                placeholder="記事のタイトルを入力..."
+                                placeholder="記事のタイトル..."
                             />
-                            {errors.title && <div className="text-red-500 text-xs mt-1">{errors.title}</div>}
+                            {errors.title && <p className="text-red-500 text-xs">{errors.title}</p>}
                         </div>
 
                         <div className="space-y-2">
@@ -84,15 +86,15 @@ export default function Create() {
                             <textarea 
                                 value={data.content}
                                 onChange={e => setData('content', e.target.value)}
-                                className="w-full bg-slate-50 border-none rounded-2xl p-4 h-64 focus:ring-2 focus:ring-slate-200 transition-all resize-none text-base leading-relaxed"
-                                placeholder="本文を入力してください..."
+                                className="w-full bg-slate-50 border-none rounded-2xl p-4 h-64 focus:ring-2 focus:ring-slate-200 transition-all resize-none text-base"
+                                placeholder="本文を入力..."
                             />
-                            {errors.content && <div className="text-red-500 text-xs mt-1">{errors.content}</div>}
+                            {errors.content && <p className="text-red-500 text-xs">{errors.content}</p>}
                         </div>
 
                         <button 
                             disabled={processing}
-                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-3 shadow-xl shadow-slate-200"
+                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-[#ff6b00] transition-all flex items-center justify-center gap-3"
                         >
                             <Send size={18} /> {processing ? '送信中...' : '記事を保存して公開'}
                         </button>

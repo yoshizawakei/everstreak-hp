@@ -20,7 +20,7 @@ class AdminContactController extends Controller
     public function toggleReplied(Contact $contact)
     {
         $contact->update([
-            'is_replied' => !$contact.is_replied,
+            'is_replied' => !$contact->is_replied,
         ]);
 
         return redirect()->back();

@@ -2,22 +2,27 @@ import { useForm, Link } from '@inertiajs/react';
 import { ArrowLeft, Save, Eye, EyeOff, Calendar } from 'lucide-react';
 
 export default function Edit({ news }) {
-    // 既存の日時を 'YYYY-MM-DDTHH:MM' 形式に変換
-    const existingDate = news.published_at 
-        ? new Date(news.published_at).toISOString().slice(0, 16)
-        : new Date(news.created_at).toISOString().slice(0, 16);
+    // 既存の日時を 'YYYY-MM-DDTHH:MM' 形式に変換 (datetime-local入力用)
+    const formatDateTime = (dateStr) => {
+        if (!dateStr) return '';
+        const d = new Date(dateStr);
+        const offset = d.getTimezoneOffset() * 60000;
+        return new Date(d.getTime() - offset).toISOString().slice(0, 16);
+    };
 
     const { data, setData, patch, processing, errors } = useForm({
         title: news.title || '',
         content: news.content || '',
         category: news.category || 'Notice',
         is_published: !!news.is_published,
-        published_at: existingDate,
+        published_at: formatDateTime(news.published_at || news.created_at),
     });
 
     const submit = (e) => {
         e.preventDefault();
-        patch(route('admin.news.update', news.id));
+        patch(route('admin.news.update', { news: news.id }), {
+            onSuccess: () => alert('更新しました'),
+        });
     };
 
     return (
@@ -28,27 +33,27 @@ export default function Edit({ news }) {
                 </Link>
 
                 <div className="bg-white rounded-[40px] p-12 shadow-sm border border-slate-200">
-                    <div className="flex justify-between items-start mb-10">
-                        <h1 className="text-2xl font-serif text-slate-900">Edit News</h1>
-                        <button 
-                            type="button"
-                            onClick={() => setData('is_published', !data.is_published)}
-                            className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold tracking-widest transition-all ${
-                                data.is_published ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-slate-200 text-slate-500'
-                            }`}
-                        >
-                            {data.is_published ? <><Eye size={14} /> PUBLIC</> : <><EyeOff size={14} /> PRIVATE</>}
-                        </button>
-                    </div>
-                    
                     <form onSubmit={submit} className="space-y-8">
+                        <div className="flex justify-between items-start mb-10">
+                            <h1 className="text-2xl font-serif text-slate-900">Edit News</h1>
+                            <button 
+                                type="button"
+                                onClick={() => setData('is_published', !data.is_published)}
+                                className={`flex items-center gap-2 px-5 py-2.5 rounded-full text-[10px] font-bold tracking-widest transition-all ${
+                                    data.is_published ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-slate-200 text-slate-500'
+                                }`}
+                            >
+                                {data.is_published ? <><Eye size={14} /> PUBLIC</> : <><EyeOff size={14} /> PRIVATE</>}
+                            </button>
+                        </div>
+                        
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">Category</label>
                                 <select 
                                     value={data.category}
                                     onChange={e => setData('category', e.target.value)}
-                                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-emerald-200 transition-all appearance-none text-sm"
+                                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all text-sm"
                                 >
                                     <option value="Notice">Notice</option>
                                     <option value="Update">Update</option>
@@ -57,13 +62,13 @@ export default function Edit({ news }) {
                             </div>
                             <div className="space-y-2">
                                 <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1 flex items-center gap-1">
-                                    <Calendar size={12} /> Release Date (Scheduled)
+                                    <Calendar size={12} /> Release Date
                                 </label>
                                 <input 
                                     type="datetime-local"
                                     value={data.published_at}
                                     onChange={e => setData('published_at', e.target.value)}
-                                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-emerald-200 transition-all text-sm"
+                                    className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all text-sm"
                                 />
                             </div>
                         </div>
@@ -74,9 +79,9 @@ export default function Edit({ news }) {
                                 type="text"
                                 value={data.title}
                                 onChange={e => setData('title', e.target.value)}
-                                className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-emerald-200 transition-all text-lg font-medium"
+                                className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all text-lg font-medium"
                             />
-                            {errors.title && <div className="text-red-500 text-xs mt-1">{errors.title}</div>}
+                            {errors.title && <p className="text-red-500 text-xs">{errors.title}</p>}
                         </div>
 
                         <div className="space-y-2">
@@ -84,14 +89,14 @@ export default function Edit({ news }) {
                             <textarea 
                                 value={data.content}
                                 onChange={e => setData('content', e.target.value)}
-                                className="w-full bg-slate-50 border-none rounded-2xl p-4 h-64 focus:ring-2 focus:ring-emerald-200 transition-all resize-none text-base leading-relaxed"
+                                className="w-full bg-slate-50 border-none rounded-2xl p-4 h-64 focus:ring-2 focus:ring-slate-200 transition-all resize-none text-base leading-relaxed"
                             />
-                            {errors.content && <div className="text-red-500 text-xs mt-1">{errors.content}</div>}
+                            {errors.content && <p className="text-red-500 text-xs">{errors.content}</p>}
                         </div>
 
                         <button 
                             disabled={processing}
-                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-slate-800 transition-all flex items-center justify-center gap-3 shadow-xl shadow-slate-200"
+                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-[#ff6b00] transition-all flex items-center justify-center gap-3"
                         >
                             <Save size={18} /> {processing ? '保存中...' : '変更を保存する'}
                         </button>

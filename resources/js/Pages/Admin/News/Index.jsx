@@ -4,6 +4,14 @@ import { Plus, Trash2, Edit3, ExternalLink, Calendar, Eye, EyeOff } from 'lucide
 export default function Index({ news }) {
     const { delete: destroy } = useForm();
 
+    const handleDelete = (id) => {
+        if (confirm('この記事を削除してもよろしいですか？')) {
+            destroy(route('admin.news.destroy', { news: id }), {
+                preserveScroll: true
+            });
+        }
+    };
+
     return (
         <div className="min-h-screen bg-slate-50 p-8 font-sans">
             <div className="max-w-6xl mx-auto">
@@ -11,7 +19,7 @@ export default function Index({ news }) {
                     <h1 className="text-2xl font-serif text-slate-900 tracking-tight">News Management</h1>
                     <Link 
                         href={route('admin.news.create')} 
-                        className="flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-cyan-900 transition-colors"
+                        className="flex items-center gap-2 bg-slate-900 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-[#ff6b00] transition-colors"
                     >
                         <Plus size={18} /> 新規記事投稿
                     </Link>
@@ -42,14 +50,16 @@ export default function Index({ news }) {
                                             </span>
                                         )}
                                     </td>
-                                    <td className="px-8 py-6 text-sm text-slate-500 font-mono flex flex-col">
-                                        <span className="flex items-center gap-1">
-                                            <Calendar size={12} /> 
-                                            {new Date(item.published_at || item.created_at).toLocaleDateString()}
-                                        </span>
-                                        {new Date(item.published_at) > new Date() && (
-                                            <span className="text-[9px] text-orange-500 font-bold uppercase mt-1">Scheduled</span>
-                                        )}
+                                    <td className="px-8 py-6 text-sm text-slate-500 font-mono">
+                                        <div className="flex flex-col">
+                                            <span className="flex items-center gap-1">
+                                                <Calendar size={12} /> 
+                                                {new Date(item.published_at || item.created_at).toLocaleDateString()}
+                                            </span>
+                                            {item.published_at && new Date(item.published_at) > new Date() && (
+                                                <span className="text-[9px] text-orange-500 font-bold uppercase mt-1">Scheduled</span>
+                                            )}
+                                        </div>
                                     </td>
                                     <td className="px-8 py-6 text-base font-medium text-slate-800">{item.title}</td>
                                     <td className="px-8 py-6">
@@ -60,13 +70,13 @@ export default function Index({ news }) {
                                     <td className="px-8 py-6 text-right">
                                         <div className="flex justify-end gap-4">
                                             <Link 
-                                                href={route('admin.news.edit', item.id)}
+                                                href={route('admin.news.edit', { news: item.id })}
                                                 className="text-slate-300 hover:text-emerald-500 transition-colors"
                                             >
                                                 <Edit3 size={18} />
                                             </Link>
                                             <button 
-                                                onClick={() => confirm('削除しますか？') && destroy(route('admin.news.destroy', item.id))}
+                                                onClick={() => handleDelete(item.id)}
                                                 className="text-slate-300 hover:text-red-500 transition-colors"
                                             >
                                                 <Trash2 size={18} />
@@ -77,8 +87,16 @@ export default function Index({ news }) {
                             ))}
                         </tbody>
                     </table>
+                    {news.length === 0 && (
+                        <div className="p-20 text-center text-slate-400 text-sm italic">記事がありません。</div>
+                    )}
                 </div>
-                {/* ... footer ... */}
+                
+                <div className="mt-8">
+                    <Link href="/" className="text-slate-400 text-xs flex items-center gap-2 hover:text-slate-600 transition-colors">
+                        <ExternalLink size={12} /> サイトを表示する
+                    </Link>
+                </div>
             </div>
         </div>
     );

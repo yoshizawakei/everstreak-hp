@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue, animate } from 'framer-motion';
-import { Head, Link } from '@inertiajs/react'; // Linkを追加
+import { Head, Link, useForm } from '@inertiajs/react'; // useFormを追加
 import { useRef, useState, useEffect } from 'react';
 import { ArrowRight, Menu, X, Send, Instagram, Mail, ArrowUpRight } from 'lucide-react';
 
@@ -34,6 +34,24 @@ export default function Welcome({ news = [] }) {
     const [isWritingStarted, setIsWritingStarted] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     
+    // --- Inertia Form Hook ---
+    const { data, setData, post, processing, errors, reset } = useForm({
+        name: '',
+        email: '',
+        message: '',
+    });
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        post(route('contact.store'), {
+            preserveScroll: true,
+            onSuccess: () => {
+                reset();
+                alert('メッセージを送信しました。ありがとうございます！');
+            },
+        });
+    };
+
     const containerRef = useRef(null);
     const worksRef = useRef(null);
     
@@ -77,9 +95,9 @@ export default function Welcome({ news = [] }) {
     }, [scrollYProgress]);
 
     const works = [
-        { id: 1, title: "Event Planning & Operation", category: "イベント企画・運営", img: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200" },
-        { id: 2, title: "Professional MC Service", category: "司会・MC", img: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200" },
-        { id: 3, title: "Web Design & Maintenance", category: "WEB制作・運営・保守", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200" },
+        { id: 1, anchor: "event", title: "Event Planning & Operation", category: "イベント企画・運営", img: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200" },
+        { id: 2, anchor: "mc", title: "Professional MC Service", category: "司会・MC", img: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200" },
+        { id: 3, anchor: "web", title: "Web Design & Maintenance", category: "WEB制作・運営・保守", img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200" },
     ];
 
     return (
@@ -89,10 +107,10 @@ export default function Welcome({ news = [] }) {
                 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
             </Head>
 
-            {/* --- Header (ここだけ修正) --- */}
+            {/* --- Header --- */}
             <motion.header 
                 style={{ backgroundColor: headerBg, backdropFilter: "blur(12px)" }}
-                className="fixed top-0 w-full z-[80] px-6 py-4 md:px-10 flex justify-between items-center border-b border-slate-900/5"
+                className="fixed top-0 w-full z-[80] px-6 py-6 md:px-10 flex justify-between items-center border-b border-slate-900/5"
             >
                 <div className="text-xl md:text-2xl font-serif italic tracking-tighter">EverStreak</div>
                 <nav className="hidden md:flex items-center gap-10 text-[9px] uppercase tracking-[0.4em] font-bold text-slate-400">
@@ -102,7 +120,7 @@ export default function Welcome({ news = [] }) {
                     <a href="#services" className="hover:text-[#ff6b00] transition-colors">Services</a>
                     <a href="#contact" className="hover:text-[#ff6b00] transition-colors">Contact</a>
                 </nav>
-                <button className="p-2 md:hidden" onClick={() => setIsMenuOpen(true)}>
+                <button className="p-2 md:hidden text-slate-900" onClick={() => setIsMenuOpen(true)}>
                     <Menu className="w-6 h-6" />
                 </button>
             </motion.header>
@@ -111,6 +129,7 @@ export default function Welcome({ news = [] }) {
                 {isOpening && <OpeningAnimation onStartExit={startIntroSequence} key="opening" />}
             </AnimatePresence>
 
+            {/* --- Hero Background --- */}
             <motion.div style={{ backgroundColor: bgColor }} className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
                 <motion.div style={{ opacity: bgLogoOpacity, scale: bgLogoScale }} className="absolute inset-0 flex items-center justify-center">
@@ -150,15 +169,8 @@ export default function Welcome({ news = [] }) {
                             </span>
                         </h2>
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 text-slate-500 leading-relaxed text-base md:text-[18px] font-light font-sans">
-                            <p>
-                                偶然の出会いを、必然の「化学反応」へ。
-                                EverStreakは、人と人がダイレクトに響き合う体験をクリエイトします。
-                                バラバラだったエネルギーが一つにまとまり、大きな流れとなって社会を動かしていく。そのプロセスこそが、私たちの真髄です。
-                            </p>
-                            <p>
-                                挑戦者のマインドと、表現者のインスピレーション。
-                                すべてのピースが「つながり」という引力で引き寄せられたとき、見たことのない新しい価値が定義されます。
-                            </p>
+                            <p>偶然の出会いを、必然の「化学反応」へ。EverStreakは、人と人がダイレクトに響き合う体験をクリエイトします。バラバラだったエネルギーが一つにまとまり、大きな流れとなって社会を動かしていく。そのプロセスこそが、私たちの真髄です。</p>
+                            <p>挑戦者のマインドと、表現者のインスピレーション。すべてのピースが「つながり」という引力で引き寄せられたとき、見たことのない新しい価値が定義されます。</p>
                         </div>
                     </motion.div>
                 </section>
@@ -172,33 +184,21 @@ export default function Welcome({ news = [] }) {
                                 transition={{ duration: 1.2 }}
                                 className="w-full md:w-2/5 aspect-[3/4] bg-slate-100 rounded-2xl overflow-hidden relative shadow-2xl"
                             >
-                                <img 
-                                    src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200" 
-                                    alt="大脇 拓仁"
-                                    className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700"
-                                />
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200" alt="大脇 拓仁" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                                 <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
                             </motion.div>
 
-                            <motion.div 
-                                initial={{ opacity: 0, x: 20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 1.2, delay: 0.2 }}
-                                className="w-full md:w-3/5"
-                            >
-                                <span className="text-[#ff6b00] text-[9px] tracking-[0.4em] font-bold uppercase mb-6 block">CEO Message</span>
-                                <h2 className="text-3xl md:text-4xl font-serif italic mb-10 text-slate-900">
-                                    「つながり」を、<br className="md:hidden" />一過性の熱狂で終わらせない。
-                                </h2>
+                            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.2 }} className="w-full md:w-3/5">
+                                <span className="text-[#ff6b00] text-[15px] tracking-[0.4em] font-bold uppercase mb-6 block">代表からのメッセージ</span>
+                                <h2 className="text-3xl md:text-4xl font-serif italic mb-10 text-slate-900">「つながり」を、<br className="md:hidden" />一過性の熱狂で終わらせない。</h2>
                                 <div className="space-y-6 text-slate-500 leading-[2.0] text-base md:text-[17px] font-light font-sans">
                                     <p>私たちは、あらゆるプロジェクトにおいて「化学反応」を大切にしています。イベント、声、そしてデジタル。異なる領域が交差する瞬間に生まれるエネルギーこそが、新しい価値を定義すると信じているからです。</p>
-                                    <p>EverStreakという名には、絶え間なく続く閃光のような軌跡という意味を込めました。一過性の成功に満足することなく、パートナーの皆様と共に、社会に長く響き続ける価値を創り上げていきたい。</p>
                                     <p>私たちが提供するのは、単なるサービスではありません。そこに集う人々の「衝動」を共有し、共鳴しあえる最高のチームとしての歩みです。</p>
                                 </div>
                                 <div className="mt-12 pt-8 border-t border-slate-100">
-                                    <p className="text-sm text-slate-400 font-serif mb-2 italic">Representative Director</p>
+                                    <p className="text-sm text-slate-500 font-serif mb-2 italic">代表取締役社長</p>
                                     <p className="text-2xl md:text-3xl font-serif tracking-widest text-slate-900">大脇 拓仁</p>
-                                    <p className="text-[10px] text-slate-300 mt-2 tracking-[0.2em] uppercase font-bold">Takuhito Ohwaki</p>
+                                    <p className="text-[10px] text-slate-500 mt-2 tracking-[0.2em] uppercase font-bold">Takuhito Ohwaki</p>
                                 </div>
                             </motion.div>
                         </div>
@@ -208,15 +208,13 @@ export default function Welcome({ news = [] }) {
                 <section id="news" className="pb-80 md:pb-[60vh] py-32 px-6 md:px-[10vw] bg-slate-50/40">
                     <div className="mx-auto">
                         <div className="flex justify-between items-baseline mb-12 border-b border-slate-900/10 pb-5">
-                            <h2 className="text-3xl md:text-4xl font-serif italic tracking-tighter text-slate-900">Information</h2>
+                            <h2 className="text-3xl md:text-4xl font-serif italic tracking-tighter text-slate-900">News</h2>
                             <span className="text-[8px] tracking-[0.4em] text-slate-400 font-bold uppercase">Archive</span>
                         </div>
                         <div className="divide-y divide-slate-900/5">
                             {news && news.length > 0 ? (
                                 news.map((item) => (
-                                    <motion.div key={item.id} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }}
-                                        className="group flex flex-col md:flex-row md:items-center py-6 md:py-8 gap-3 md:gap-12 cursor-pointer relative"
-                                    >
+                                    <motion.div key={item.id} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="group flex flex-col md:flex-row md:items-center py-6 md:py-8 gap-3 md:gap-12 cursor-pointer relative">
                                         <div className="flex items-center gap-6 min-w-[150px]">
                                             <span className="text-xs font-light text-slate-400 font-mono tracking-tighter">{item.date}</span>
                                             <span className="text-[8px] px-2 py-0.5 border border-slate-200 text-slate-400 tracking-widest font-bold group-hover:border-[#ff6b00] group-hover:text-[#ff6b00] transition-colors">{item.cat}</span>
@@ -226,15 +224,16 @@ export default function Welcome({ news = [] }) {
                                     </motion.div>
                                 ))
                             ) : (
-                                <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} className="py-20 text-center">
+                                <div className="py-20 text-center">
                                     <p className="text-[20px] text-slate-600 font-serif italic tracking-widest mb-2">Coming soon...</p>
-                                    <p className="text-[20px] text-slate-600 uppercase tracking-[0.3em]">現在、新しいお知らせを準備中です。</p>
-                                </motion.div>
+                                    <p className="text-[14px] text-slate-400 uppercase tracking-[0.3em]">現在、新しいお知らせを準備中です。</p>
+                                </div>
                             )}
                         </div>
                     </div>
                 </section>
 
+                {/* --- Services Section --- */}
                 <section id="services" className="pb-20 md:pb-[20vh] py-32 px-6 md:px-[10vw]">
                     <div className="mb-16 flex justify-between items-end border-b border-slate-900/10 pb-5">
                         <h2 className="text-3xl md:text-4xl font-serif italic tracking-tighter text-slate-900">Our Services</h2>
@@ -242,14 +241,16 @@ export default function Welcome({ news = [] }) {
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-20">
                         {works.map((work) => (
-                            <motion.div key={work.id} initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }} className="group cursor-pointer">
-                                <div className="aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative shadow-lg">
-                                    <img src={work.img} className="w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" alt={work.title} />
-                                    <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-[#ff6b00]/10 transition-colors duration-500" />
-                                </div>
-                                <span className="text-[18px] tracking-[0.1em] font-bold text-[#ff6b00] block mb-2">{work.category}</span>
-                                <h3 className="text-[20px] text-lg md:text-xl font-serif font-extralight text-slate-700 group-hover:text-slate-900 transition-colors leading-snug">{work.title}</h3>
-                            </motion.div>
+                            <Link key={work.id} href={`/services#${work.anchor}`} className="group cursor-pointer">
+                                <motion.div initial={{ opacity: 0, y: 15 }} whileInView={{ opacity: 1, y: 0 }}>
+                                    <div className="aspect-[4/5] overflow-hidden rounded-2xl mb-6 relative shadow-lg">
+                                        <img src={work.img} className="w-full h-full object-cover transition-transform duration-[1.2s] group-hover:scale-105" alt={work.title} />
+                                        <div className="absolute inset-0 bg-slate-900/5 group-hover:bg-[#ff6b00]/10 transition-colors duration-500" />
+                                    </div>
+                                    <span className="text-[18px] tracking-[0.1em] font-bold text-[#ff6b00] block mb-2">{work.category}</span>
+                                    <h3 className="text-[20px] text-lg md:text-xl font-serif font-extralight text-slate-700 group-hover:text-slate-900 transition-colors leading-snug">{work.title}</h3>
+                                </motion.div>
+                            </Link>
                         ))}
                     </div>
                 </section>
@@ -264,6 +265,7 @@ export default function Welcome({ news = [] }) {
                     </motion.div>
                 </section>
 
+                {/* --- Contact Section (修正済み) --- */}
                 <section id="contact" className="py-32 px-6 md:px-[10vw]">
                     <div className="max-w-5xl mx-auto bg-white rounded-[32px] md:rounded-[48px] p-8 md:p-16 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-50 relative overflow-hidden">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 relative z-10">
@@ -285,21 +287,44 @@ export default function Welcome({ news = [] }) {
                                     </div>
                                 </div>
                             </div>
-                            <form className="flex flex-col gap-3 md:gap-8">
+                            <form onSubmit={handleSubmit} className="flex flex-col gap-3 md:gap-8">
                                 <div className="space-y-2 border-b border-slate-100 pb-3 focus-within:border-[#ff6b00] transition-colors">
                                     <label className="text-[8px] uppercase tracking-[0.3em] text-slate-300 font-bold">Full Name</label>
-                                    <input className="w-full bg-transparent border-none p-0 text-lg md:text-xl font-serif focus:ring-0 outline-none" placeholder="お名前" />
+                                    <input 
+                                        className="w-full bg-transparent border-none p-0 text-lg md:text-xl font-serif focus:ring-0 outline-none" 
+                                        placeholder="お名前" 
+                                        value={data.name}
+                                        onChange={e => setData('name', e.target.value)}
+                                    />
+                                    {errors.name && <p className="text-red-500 text-[10px] mt-1">{errors.name}</p>}
                                 </div>
                                 <div className="space-y-2 border-b border-slate-100 pb-3 focus-within:border-[#ff6b00] transition-colors">
                                     <label className="text-[8px] uppercase tracking-[0.3em] text-slate-300 font-bold">Email Address</label>
-                                    <input className="w-full bg-transparent border-none p-0 text-lg md:text-xl font-serif focus:ring-0 outline-none" placeholder="email@example.com" />
+                                    <input 
+                                        className="w-full bg-transparent border-none p-0 text-lg md:text-xl font-serif focus:ring-0 outline-none" 
+                                        placeholder="email@example.com" 
+                                        value={data.email}
+                                        onChange={e => setData('email', e.target.value)}
+                                    />
+                                    {errors.email && <p className="text-red-500 text-[10px] mt-1">{errors.email}</p>}
                                 </div>
                                 <div className="space-y-2 border-b border-slate-100 pb-3 focus-within:border-[#ff6b00] transition-colors">
                                     <label className="text-[8px] uppercase tracking-[0.3em] text-slate-300 font-bold">Message</label>
-                                    <textarea rows="2" className="w-full bg-transparent border-none p-0 text-lg md:text-xl font-serif focus:ring-0 resize-none outline-none" placeholder="ご用件をお聞かせください" />
+                                    <textarea 
+                                        rows="2" 
+                                        className="w-full bg-transparent border-none p-0 text-lg md:text-xl font-serif focus:ring-0 resize-none outline-none" 
+                                        placeholder="ご用件をお聞かせください" 
+                                        value={data.message}
+                                        onChange={e => setData('message', e.target.value)}
+                                    />
+                                    {errors.message && <p className="text-red-500 text-[10px] mt-1">{errors.message}</p>}
                                 </div>
-                                <button className="w-full bg-slate-900 text-white rounded-full py-6 md:py-8 text-[9px] tracking-[0.4em] uppercase font-bold flex items-center justify-center gap-3 hover:bg-[#ff6b00] transition-all shadow-md active:scale-95">
-                                    Send Message <Send className="w-4 h-4" />
+                                <button 
+                                    type="submit"
+                                    disabled={processing}
+                                    className={`w-full bg-slate-900 text-white rounded-full py-6 md:py-8 text-[9px] tracking-[0.4em] uppercase font-bold flex items-center justify-center gap-3 transition-all shadow-md active:scale-95 ${processing ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#ff6b00]'}`}
+                                >
+                                    {processing ? 'Sending...' : 'Send Message'} <Send className="w-4 h-4" />
                                 </button>
                             </form>
                         </div>
@@ -312,76 +337,22 @@ export default function Welcome({ news = [] }) {
                 </footer>
             </main>
 
-            {/* --- Mobile Menu (修正・エラー解消版) --- */}
+            {/* --- Mobile Menu --- */}
             <AnimatePresence>
                 {isMenuOpen && (
-                    <motion.div 
-                        initial={{ opacity: 0, y: -10 }} 
-                        animate={{ opacity: 1, y: 0 }} 
-                        exit={{ opacity: 0, y: -10 }} 
-                        // 背景の白を95%まで上げ、ぼかしを強くすることで、背後の色に左右されず文字が見えるようにしました
-                        className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-2xl flex flex-col"
-                    >
-                        {/* 閉じるボタン */}
+                    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-2xl flex flex-col">
                         <div className="flex justify-end p-6 md:p-10">
-                            <button onClick={() => setIsMenuOpen(false)}>
-                                <X className="w-6 h-6 text-slate-900" />
-                            </button>
+                            <button onClick={() => setIsMenuOpen(false)} className="text-slate-900"><X className="w-6 h-6" /></button>
                         </div>
-
                         <nav className="flex flex-col items-center justify-center flex-1 gap-8">
-                            {/* 1. Philosophy */}
-                            <a 
-                                href="#philosophy" 
-                                onClick={() => setIsMenuOpen(false)} 
-                                className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors"
-                            >
-                                Philosophy
-                            </a>
-
-                            {/* 2. About (Inertia Link) */}
-                            <Link 
-                                href="/about" 
-                                onClick={() => setIsMenuOpen(false)} 
-                                className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors"
-                            >
-                                About
-                            </Link>
-
-                            {/* 3. News */}
-                            <a 
-                                href="#news" 
-                                onClick={() => setIsMenuOpen(false)} 
-                                className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors"
-                            >
-                                News
-                            </a>
-
-                            {/* 4. Services */}
-                            <a 
-                                href="#services" 
-                                onClick={() => setIsMenuOpen(false)} 
-                                className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors"
-                            >
-                                Services
-                            </a>
-
-                            {/* 5. Contact */}
-                            <a 
-                                href="#contact" 
-                                onClick={() => setIsMenuOpen(false)} 
-                                className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors"
-                            >
-                                Contact
-                            </a>
-                            
-                            {/* 装飾ライン */}
+                            <a href="#philosophy" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">Philosophy</a>
+                            <Link href="/about" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">About</Link>
+                            <a href="#news" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">News</a>
+                            <a href="#services" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">Services</a>
+                            <a href="#contact" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">Contact</a>
                             <div className="w-10 h-px bg-slate-200 mt-4" />
-                            
-                            {/* SNSアイコン */}
                             <div className="flex gap-8 mt-4">
-                                <Instagram className="w-5 h-5 text-slate-400" />
-                                <Mail className="w-5 h-5 text-slate-400" />
+                                <Instagram className="w-5 h-5 text-slate-400" /><Mail className="w-5 h-5 text-slate-400" />
                             </div>
                         </nav>
                     </motion.div>
