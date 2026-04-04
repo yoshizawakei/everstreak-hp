@@ -1,8 +1,11 @@
+import React from 'react';
 import { useForm, Link } from '@inertiajs/react';
 import { ArrowLeft, Send, Eye, EyeOff, Calendar } from 'lucide-react';
+// リッチエディタの導入
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 export default function Create() {
-    // 現在時刻を 'YYYY-MM-DDTHH:MM' 形式で取得
     const now = new Date();
     const localDateTime = new Date(now.getTime() - now.getTimezoneOffset() * 60000).toISOString().slice(0, 16);
 
@@ -13,6 +16,18 @@ export default function Create() {
         is_published: true,
         published_at: localDateTime,
     });
+
+    // エディタのツールバー設定
+    const modules = {
+        toolbar: [
+            [{ 'header': [2, 3, false] }], // 中タイトル(H2), 小タイトル(H3)
+            ['bold', 'italic', 'underline', 'strike'], // 太字、斜体、下線、打ち消し線
+            [{ 'color': [] }, { 'background': [] }], // 文字色、背景色
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }], // 箇条書き
+            ['link', 'image'], // リンク、画像
+            ['clean'] // フォーマット解除
+        ],
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -83,24 +98,35 @@ export default function Create() {
 
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">Content</label>
-                            <textarea 
-                                value={data.content}
-                                onChange={e => setData('content', e.target.value)}
-                                className="w-full bg-slate-50 border-none rounded-2xl p-4 h-64 focus:ring-2 focus:ring-slate-200 transition-all resize-none text-base"
-                                placeholder="本文を入力..."
-                            />
+                            <div className="bg-slate-50 rounded-2xl overflow-hidden min-h-[400px] flex flex-col">
+                                <ReactQuill 
+                                    theme="snow"
+                                    value={data.content}
+                                    onChange={value => setData('content', value)}
+                                    modules={modules}
+                                    className="flex-1 flex flex-col"
+                                    placeholder="本文をデザインしてください..."
+                                />
+                            </div>
                             {errors.content && <p className="text-red-500 text-xs">{errors.content}</p>}
                         </div>
 
                         <button 
                             disabled={processing}
-                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-[#ff6b00] transition-all flex items-center justify-center gap-3"
+                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-[#ff6b00] transition-all flex items-center justify-center gap-3 mt-12"
                         >
                             <Send size={18} /> {processing ? '送信中...' : '記事を保存して公開'}
                         </button>
                     </form>
                 </div>
             </div>
+            {/* エディタのスタイル調整 */}
+            <style>{`
+                .ql-container { font-size: 16px; border: none !important; flex: 1; }
+                .ql-toolbar { border: none !important; border-bottom: 1px solid #e2e8f0 !important; background: #f8fafc; }
+                .ql-editor { min-h-[300px]; padding: 1.5rem; }
+                .ql-editor.ql-blank::before { color: #cbd5e1; font-style: normal; }
+            `}</style>
         </div>
     );
 }

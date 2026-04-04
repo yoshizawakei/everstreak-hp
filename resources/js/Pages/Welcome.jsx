@@ -1,5 +1,6 @@
+import React from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue, animate } from 'framer-motion';
-import { Head, Link, useForm } from '@inertiajs/react'; // useFormを追加
+import { Head, Link, useForm } from '@inertiajs/react';
 import { useRef, useState, useEffect } from 'react';
 import { ArrowRight, Menu, X, Send, Instagram, Mail, ArrowUpRight } from 'lucide-react';
 
@@ -29,12 +30,14 @@ const OpeningAnimation = ({ onStartExit }) => (
     </motion.div>
 );
 
-export default function Welcome({ news = [] }) {
+export default function Welcome(props) {
+    // Inertiaから渡される news を確実に受け取る
+    const { news = [] } = props;
+    
     const [isOpening, setIsOpening] = useState(true);
     const [isWritingStarted, setIsWritingStarted] = useState(false);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     
-    // --- Inertia Form Hook ---
     const { data, setData, post, processing, errors, reset } = useForm({
         name: '',
         email: '',
@@ -107,7 +110,6 @@ export default function Welcome({ news = [] }) {
                 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;1,400&display=swap" rel="stylesheet" />
             </Head>
 
-            {/* --- Header --- */}
             <motion.header 
                 style={{ backgroundColor: headerBg, backdropFilter: "blur(12px)" }}
                 className="fixed top-0 w-full z-[80] px-6 py-6 md:px-10 flex justify-between items-center border-b border-slate-900/5"
@@ -129,7 +131,6 @@ export default function Welcome({ news = [] }) {
                 {isOpening && <OpeningAnimation onStartExit={startIntroSequence} key="opening" />}
             </AnimatePresence>
 
-            {/* --- Hero Background --- */}
             <motion.div style={{ backgroundColor: bgColor }} className="fixed inset-0 z-0 pointer-events-none">
                 <div className="absolute inset-0 opacity-[0.025]" style={{ backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")` }} />
                 <motion.div style={{ opacity: bgLogoOpacity, scale: bgLogoScale }} className="absolute inset-0 flex items-center justify-center">
@@ -150,7 +151,6 @@ export default function Welcome({ news = [] }) {
             </motion.div>
 
             <main className={`relative z-20 transition-opacity duration-1000 ${isOpening ? 'opacity-0' : 'opacity-1'}`}>
-
                 <section className="h-screen flex flex-col items-center justify-center px-6">
                     <motion.div style={{ opacity: contentOpacity }} className="text-center">
                         <h1 className="text-[13vw] md:text-[7rem] lg:text-[8.5rem] font-serif font-extralight text-slate-900 leading-[0.9]">EverStreak</h1>
@@ -175,36 +175,7 @@ export default function Welcome({ news = [] }) {
                     </motion.div>
                 </section>
 
-                <section id="message" className="pb-20 md:pb-[30vh] py-24 md:py-40 px-6 md:px-[12vw] bg-white">
-                    <div className="max-w-6xl mx-auto">
-                        <div className="flex flex-col md:flex-row items-center gap-16 md:gap-24">
-                            <motion.div 
-                                initial={{ opacity: 0, x: -20 }}
-                                whileInView={{ opacity: 1, x: 0 }}
-                                transition={{ duration: 1.2 }}
-                                className="w-full md:w-2/5 aspect-[3/4] bg-slate-100 rounded-2xl overflow-hidden relative shadow-2xl"
-                            >
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200" alt="大脇 拓仁" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
-                                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 to-transparent" />
-                            </motion.div>
-
-                            <motion.div initial={{ opacity: 0, x: 20 }} whileInView={{ opacity: 1, x: 0 }} transition={{ duration: 1.2, delay: 0.2 }} className="w-full md:w-3/5">
-                                <span className="text-[#ff6b00] text-[15px] tracking-[0.4em] font-bold uppercase mb-6 block">代表からのメッセージ</span>
-                                <h2 className="text-3xl md:text-4xl font-serif italic mb-10 text-slate-900">「つながり」を、<br className="md:hidden" />一過性の熱狂で終わらせない。</h2>
-                                <div className="space-y-6 text-slate-500 leading-[2.0] text-base md:text-[17px] font-light font-sans">
-                                    <p>私たちは、あらゆるプロジェクトにおいて「化学反応」を大切にしています。イベント、声、そしてデジタル。異なる領域が交差する瞬間に生まれるエネルギーこそが、新しい価値を定義すると信じているからです。</p>
-                                    <p>私たちが提供するのは、単なるサービスではありません。そこに集う人々の「衝動」を共有し、共鳴しあえる最高のチームとしての歩みです。</p>
-                                </div>
-                                <div className="mt-12 pt-8 border-t border-slate-100">
-                                    <p className="text-sm text-slate-500 font-serif mb-2 italic">代表取締役社長</p>
-                                    <p className="text-2xl md:text-3xl font-serif tracking-widest text-slate-900">大脇 拓仁</p>
-                                    <p className="text-[10px] text-slate-500 mt-2 tracking-[0.2em] uppercase font-bold">Takuhito Ohwaki</p>
-                                </div>
-                            </motion.div>
-                        </div>
-                    </div>
-                </section>
-
+                {/* News Section */}
                 <section id="news" className="pb-80 md:pb-[60vh] py-32 px-6 md:px-[10vw] bg-slate-50/40">
                     <div className="mx-auto">
                         <div className="flex justify-between items-baseline mb-12 border-b border-slate-900/10 pb-5">
@@ -212,16 +183,26 @@ export default function Welcome({ news = [] }) {
                             <span className="text-[8px] tracking-[0.4em] text-slate-400 font-bold uppercase">Archive</span>
                         </div>
                         <div className="divide-y divide-slate-900/5">
-                            {news && news.length > 0 ? (
+                            {news.length > 0 ? (
                                 news.map((item) => (
-                                    <motion.div key={item.id} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="group flex flex-col md:flex-row md:items-center py-6 md:py-8 gap-3 md:gap-12 cursor-pointer relative">
+                                    <Link 
+                                        key={item.id} 
+                                        href={`/news/${item.id}`}
+                                        className="group flex flex-col md:flex-row md:items-center py-6 md:py-8 gap-3 md:gap-12 cursor-pointer relative"
+                                    >
                                         <div className="flex items-center gap-6 min-w-[150px]">
-                                            <span className="text-xs font-light text-slate-400 font-mono tracking-tighter">{item.date}</span>
-                                            <span className="text-[8px] px-2 py-0.5 border border-slate-200 text-slate-400 tracking-widest font-bold group-hover:border-[#ff6b00] group-hover:text-[#ff6b00] transition-colors">{item.cat}</span>
+                                            <span className="text-xs font-light text-slate-400 font-mono tracking-tighter">
+                                                {item.published_at ? item.published_at.substring(0, 10).replace(/-/g, '.') : '----.--.--'}
+                                            </span>
+                                            <span className="text-[8px] px-2 py-0.5 border border-slate-200 text-slate-400 tracking-widest font-bold group-hover:border-[#ff6b00] group-hover:text-[#ff6b00] transition-colors">
+                                                {item.category || 'INFO'}
+                                            </span>
                                         </div>
-                                        <h3 className="text-base md:text-lg font-light text-slate-600 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">{item.title}</h3>
+                                        <h3 className="text-base md:text-lg font-light text-slate-600 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">
+                                            {item.title}
+                                        </h3>
                                         <ArrowUpRight className="hidden md:block ml-auto w-4 h-4 text-slate-200 group-hover:text-[#ff6b00] transition-colors" />
-                                    </motion.div>
+                                    </Link>
                                 ))
                             ) : (
                                 <div className="py-20 text-center">
@@ -233,7 +214,6 @@ export default function Welcome({ news = [] }) {
                     </div>
                 </section>
 
-                {/* --- Services Section --- */}
                 <section id="services" className="pb-20 md:pb-[20vh] py-32 px-6 md:px-[10vw]">
                     <div className="mb-16 flex justify-between items-end border-b border-slate-900/10 pb-5">
                         <h2 className="text-3xl md:text-4xl font-serif italic tracking-tighter text-slate-900">Our Services</h2>
@@ -265,7 +245,6 @@ export default function Welcome({ news = [] }) {
                     </motion.div>
                 </section>
 
-                {/* --- Contact Section (修正済み) --- */}
                 <section id="contact" className="py-32 px-6 md:px-[10vw]">
                     <div className="max-w-5xl mx-auto bg-white rounded-[32px] md:rounded-[48px] p-8 md:p-16 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.05)] border border-slate-50 relative overflow-hidden">
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-24 relative z-10">
@@ -337,7 +316,6 @@ export default function Welcome({ news = [] }) {
                 </footer>
             </main>
 
-            {/* --- Mobile Menu --- */}
             <AnimatePresence>
                 {isMenuOpen && (
                     <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }} className="fixed inset-0 z-[100] bg-white/95 backdrop-blur-2xl flex flex-col">

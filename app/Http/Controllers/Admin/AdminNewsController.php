@@ -27,7 +27,14 @@ class AdminNewsController extends Controller
             'title' => 'required|max:255',
             'content' => 'required',
             'category' => 'required',
+            // 以下を追加
+            'is_published' => 'nullable|boolean',
+            'published_at' => 'nullable|date',
         ]);
+
+        // デフォルト値を設定
+        $validated['is_published'] = $request->boolean('is_published', true);
+        $validated['published_at'] = $request->published_at ?: now();
 
         News::create($validated);
 
@@ -55,7 +62,14 @@ class AdminNewsController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'category' => 'required|string',
+            // 以下を追加
+            'is_published' => 'nullable|boolean',
+            'published_at' => 'nullable|date',
         ]);
+
+        // 値を反映
+        $validated['is_published'] = $request->boolean('is_published');
+        $validated['published_at'] = $request->published_at ?: $news->published_at;
 
         $news->update($validated);
 

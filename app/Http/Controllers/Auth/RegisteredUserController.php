@@ -32,8 +32,18 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|string|lowercase|email|max:255|unique:'.User::class,
+            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'invitation_code' => [
+                'required',
+                function ($attribute, $value, $fail) {
+                    if ($value !== 'EverStreak2026') {
+                        $fail('招待コードが正しくありません。');
+                    }
+                }
+            ],
+        ], [
+            'invitation_code.required' => '招待コードを入力してください。',
         ]);
 
         $user = User::create([

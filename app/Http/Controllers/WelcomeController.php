@@ -14,13 +14,16 @@ class WelcomeController extends Controller
      */
     public function index()
     {
+        // 修正ポイント：条件をシンプルにして、確実にデータが届くか確認する
+        $news = News::where('is_published', true)
+            // デバッグ期間中は一旦コメントアウトするか、日付のみで比較する
+            // ->where('published_at', '<=', now()) 
+            ->latest('published_at')
+            ->take(5)
+            ->get();
+
         return Inertia::render('Welcome', [
-            // 公開中かつ、公開日時が現在より前のものを最新5件取得
-            'news' => News::where('is_published', true)
-                ->where('published_at', '<=', now())
-                ->latest('published_at')
-                ->take(5)
-                ->get()
+            'news' => $news
         ]);
     }
 

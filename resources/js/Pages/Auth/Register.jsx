@@ -10,6 +10,7 @@ export default function Register() {
         email: '',
         password: '',
         password_confirmation: '',
+        invitation_code: '',
     });
 
     const submit = (e) => {
@@ -54,6 +55,23 @@ export default function Register() {
                         required
                     />
                     <InputError message={errors.email} />
+                </div>
+
+                {/* --- 既存の Email 項目の下に追加 --- */}
+                <div className="space-y-1">
+                    <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1 flex items-center gap-1">
+                        {/* LucideからKeyアイコンをインポートして使うとさらに良いです */}
+                        <Lock size={12} /> Invitation Code
+                    </label>
+                    <TextInput
+                        type="text"
+                        value={data.invitation_code}
+                        placeholder="招待コードを入力してください"
+                        className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all"
+                        onChange={(e) => setData('invitation_code', e.target.value)}
+                        required
+                    />
+                    <InputError message={errors.invitation_code} />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

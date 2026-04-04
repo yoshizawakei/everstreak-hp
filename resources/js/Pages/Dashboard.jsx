@@ -12,11 +12,28 @@ import {
 } from 'lucide-react';
 
 export default function Dashboard({ auth, newsCount, messageCount }) {
-    // 統計データ（ダミーまたはPropsから取得）
     const stats = [
-        { label: 'Total News', value: newsCount || 0, icon: <Newspaper size={20} />, href: route('admin.news.index'), color: 'bg-blue-50 text-blue-600' },
-        { label: 'Messages', value: messageCount || 0, icon: <Mail size={20} />, href: '#', color: 'bg-emerald-50 text-emerald-600' },
-        { label: 'System Status', value: 'Active', icon: <TrendingUp size={20} />, href: '#', color: 'bg-orange-50 text-[#ff6b00]' },
+        { 
+            label: 'Total News', 
+            value: newsCount || 0, 
+            icon: <Newspaper size={20} />, 
+            href: route('admin.news.index'), 
+            color: 'bg-blue-50 text-blue-600' 
+        },
+        { 
+            label: 'Messages', 
+            value: messageCount || 0, 
+            icon: <Mail size={20} />, 
+            href: route('admin.contacts.index'), 
+            color: 'bg-emerald-50 text-emerald-600' 
+        },
+        { 
+            label: 'System Status', 
+            value: 'Active', 
+            icon: <TrendingUp size={20} />, 
+            href: route('dashboard'), // リロードするように設定
+            color: 'bg-orange-50 text-[#ff6b00]' 
+        },
     ];
 
     return (
@@ -58,11 +75,10 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
                                 </Link>
                             </div>
                         </div>
-                        {/* 背景の装飾的アクセント */}
                         <div className="absolute top-[-20%] right-[-5%] w-64 h-64 bg-[#ff6b00] rounded-full blur-[100px] opacity-20"></div>
                     </motion.div>
 
-                    {/* Stats Grid */}
+                    {/* Stats Grid - 全体をLinkに変更 */}
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
                         {stats.map((stat, index) => (
                             <motion.div
@@ -70,23 +86,27 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.1 }}
-                                className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm hover:shadow-md transition-all group"
                             >
-                                <div className="flex justify-between items-start mb-4">
-                                    <div className={`p-3 rounded-2xl ${stat.color}`}>
-                                        {stat.icon}
+                                <Link 
+                                    href={stat.href}
+                                    className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm hover:shadow-md transition-all group block h-full"
+                                >
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className={`p-3 rounded-2xl ${stat.color}`}>
+                                            {stat.icon}
+                                        </div>
+                                        <div className="text-slate-300 group-hover:text-slate-900 transition-colors">
+                                            <ArrowRight size={20} />
+                                        </div>
                                     </div>
-                                    <Link href={stat.href} className="text-slate-300 group-hover:text-slate-900 transition-colors">
-                                        <ArrowRight size={20} />
-                                    </Link>
-                                </div>
-                                <div className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">{stat.label}</div>
-                                <div className="text-3xl font-serif text-slate-900">{stat.value}</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">{stat.label}</div>
+                                    <div className="text-3xl font-serif text-slate-900">{stat.value}</div>
+                                </Link>
                             </motion.div>
                         ))}
                     </div>
 
-                    {/* Quick Actions / Recent activity */}
+                    {/* Quick Actions */}
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm">
                             <h4 className="text-lg font-serif mb-6 flex items-center gap-2 text-slate-900">
@@ -112,17 +132,22 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
                             </div>
                         </div>
 
-                        <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm flex flex-col items-center justify-center text-center">
-                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4">
-                                <Mail size={24} className="text-slate-300" />
+                        {/* メッセージカード全体もLinkで包むとより使いやすくなります */}
+                        <Link 
+                            href={route('admin.contacts.index')}
+                            className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm flex flex-col items-center justify-center text-center hover:bg-slate-50 transition-all group"
+                        >
+                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-white transition-all">
+                                <Mail size={24} className="text-slate-300 group-hover:text-emerald-500" />
                             </div>
-                            <h4 className="text-sm font-bold text-slate-900">No New Messages</h4>
+                            <h4 className="text-sm font-bold text-slate-900">
+                                {messageCount > 0 ? `${messageCount}件の未読メッセージ` : 'No New Messages'}
+                            </h4>
                             <p className="text-xs text-slate-400 mt-2 max-w-[200px]">
-                                現在、新しいお問い合わせはありません。
+                                お問い合わせの一覧を確認するにはここをクリック。
                             </p>
-                        </div>
+                        </Link>
                     </div>
-
                 </div>
             </div>
         </AuthenticatedLayout>

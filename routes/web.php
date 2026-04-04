@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminNewsController;
 use App\Http\Controllers\Admin\AdminContactController;
 use App\Http\Controllers\WelcomeController;
+use App\Http\Controllers\NewsController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -65,3 +66,5 @@ Route::get('/about', function () {
 Route::get('/services', function () {
     return Inertia::render('Services');
 });
+
+Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');

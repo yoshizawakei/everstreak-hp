@@ -1,8 +1,10 @@
+import React from 'react';
 import { useForm, Link } from '@inertiajs/react';
 import { ArrowLeft, Save, Eye, EyeOff, Calendar } from 'lucide-react';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 export default function Edit({ news }) {
-    // 既存の日時を 'YYYY-MM-DDTHH:MM' 形式に変換 (datetime-local入力用)
     const formatDateTime = (dateStr) => {
         if (!dateStr) return '';
         const d = new Date(dateStr);
@@ -17,6 +19,17 @@ export default function Edit({ news }) {
         is_published: !!news.is_published,
         published_at: formatDateTime(news.published_at || news.created_at),
     });
+
+    const modules = {
+        toolbar: [
+            [{ 'header': [2, 3, false] }],
+            ['bold', 'italic', 'underline', 'strike'],
+            [{ 'color': [] }, { 'background': [] }],
+            [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+            ['link', 'image'],
+            ['clean']
+        ],
+    };
 
     const submit = (e) => {
         e.preventDefault();
@@ -86,23 +99,32 @@ export default function Edit({ news }) {
 
                         <div className="space-y-2">
                             <label className="text-[10px] uppercase tracking-widest text-slate-400 font-bold ml-1">Content</label>
-                            <textarea 
-                                value={data.content}
-                                onChange={e => setData('content', e.target.value)}
-                                className="w-full bg-slate-50 border-none rounded-2xl p-4 h-64 focus:ring-2 focus:ring-slate-200 transition-all resize-none text-base leading-relaxed"
-                            />
+                            <div className="bg-slate-50 rounded-2xl overflow-hidden min-h-[400px] flex flex-col">
+                                <ReactQuill 
+                                    theme="snow"
+                                    value={data.content}
+                                    onChange={value => setData('content', value)}
+                                    modules={modules}
+                                    className="flex-1 flex flex-col"
+                                />
+                            </div>
                             {errors.content && <p className="text-red-500 text-xs">{errors.content}</p>}
                         </div>
 
                         <button 
                             disabled={processing}
-                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-[#ff6b00] transition-all flex items-center justify-center gap-3"
+                            className="w-full py-5 bg-slate-900 text-white rounded-full text-sm font-bold hover:bg-[#ff6b00] transition-all flex items-center justify-center gap-3 mt-12"
                         >
                             <Save size={18} /> {processing ? '保存中...' : '変更を保存する'}
                         </button>
                     </form>
                 </div>
             </div>
+            <style>{`
+                .ql-container { font-size: 16px; border: none !important; flex: 1; }
+                .ql-toolbar { border: none !important; border-bottom: 1px solid #e2e8f0 !important; background: #f8fafc; }
+                .ql-editor { min-h-[300px]; padding: 1.5rem; }
+            `}</style>
         </div>
     );
 }
