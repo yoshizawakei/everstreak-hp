@@ -60,11 +60,11 @@ export default function Index({ auth, news }) {
                                         <td className="px-8 py-6">
                                             {item.is_published ? (
                                                 <span className="flex items-center gap-1.5 text-emerald-600 text-[10px] font-bold uppercase tracking-wider">
-                                                    <Eye size={12} /> Public
+                                                    <Eye size={12} /> 公開中
                                                 </span>
                                             ) : (
                                                 <span className="flex items-center gap-1.5 text-slate-400 text-[10px] font-bold uppercase tracking-wider">
-                                                    <EyeOff size={12} /> Private
+                                                    <EyeOff size={12} /> 非公開
                                                 </span>
                                             )}
                                         </td>

@@ -8,7 +8,7 @@ export default function About() {
             <Head title="About Us | EverStreak" />
 
             {/* 1. 固定ヘッダー */}
-            <header className="fixed top-0 w-full z-[80] px-6 py-4 md:px-10 flex justify-between items-center border-b border-slate-900/5">
+            <header className="fixed top-0 w-full z-[80] px-6 py-4 md:px-10 flex justify-between items-center border-b border-slate-900/5 bg-[#fdfdfe]/80 backdrop-blur-md">
                 {/* ロゴのサイズを text-2xl に、追跡をよりタイトに設定 */}
                 <Link 
                     href="/" 

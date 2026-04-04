@@ -31,8 +31,14 @@ const OpeningAnimation = ({ onStartExit }) => (
 );
 
 export default function Welcome(props) {
-    // Inertiaから渡される news を確実に受け取る
+    
     const { news = [] } = props;
+
+    const categoryNames = {
+        'notice': 'お知らせ',
+        'update': '更新情報',
+        'event':  'イベント',
+    };
     
     const [isOpening, setIsOpening] = useState(true);
     const [isWritingStarted, setIsWritingStarted] = useState(false);
@@ -116,7 +122,7 @@ export default function Welcome(props) {
             >
                 <div className="text-xl md:text-2xl font-serif italic tracking-tighter">EverStreak</div>
                 <nav className="hidden md:flex items-center gap-10 text-[9px] uppercase tracking-[0.4em] font-bold text-slate-400">
-                    <a href="#philosophy" className="hover:text-[#ff6b00] transition-colors">Philosophy</a>
+                    <a href="#philosophy" className="hover:text-[#ff6b00] transition-colors">Core Values</a>
                     <Link href="/about" className="hover:text-[#ff6b00] transition-colors">About</Link>
                     <a href="#news" className="hover:text-[#ff6b00] transition-colors">News</a>
                     <a href="#services" className="hover:text-[#ff6b00] transition-colors">Services</a>
@@ -161,7 +167,7 @@ export default function Welcome(props) {
 
                 <section id="philosophy" className="scroll-mt-40 pt-25 md:pt-24 pb-40 md:pb-[40vh] px-6 md:px-[15vw] flex flex-col justify-center">
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
-                        <span className="text-[#ff6b00] text-[23px] tracking-[0.2em] font-bold uppercase mb-8 block">Brand Philosophy</span>
+                        <span className="text-[#ff6b00] text-[23px] tracking-[0.2em] font-bold uppercase mb-8 block">Core Values</span>
                         <h2 className="text-2xl md:text-5xl lg:text-4xl font-serif font-extralight leading-[1.8] text-slate-900 mb-12 group cursor-default">
                             一人ひとりの衝動をシェアして、<br />
                             <span className="italic text-[#ff6b00] underline underline-offset-[12px] md:underline-offset-[16px] decoration-1 transition-all group-hover:text-orange-600">
@@ -180,7 +186,7 @@ export default function Welcome(props) {
                     <div className="mx-auto">
                         <div className="flex justify-between items-baseline mb-12 border-b border-slate-900/10 pb-5">
                             <h2 className="text-3xl md:text-4xl font-serif italic tracking-tighter text-slate-900">News</h2>
-                            <span className="text-[8px] tracking-[0.4em] text-slate-400 font-bold uppercase">Archive</span>
+                            {/* <span className="text-[8px] tracking-[0.4em] text-slate-400 font-bold uppercase"></span> */}
                         </div>
                         <div className="divide-y divide-slate-900/5">
                             {news.length > 0 ? (
@@ -191,14 +197,14 @@ export default function Welcome(props) {
                                         className="group flex flex-col md:flex-row md:items-center py-6 md:py-8 gap-3 md:gap-12 cursor-pointer relative"
                                     >
                                         <div className="flex items-center gap-6 min-w-[150px]">
-                                            <span className="text-xs font-light text-slate-400 font-mono tracking-tighter">
+                                            <span className="text-[15px] font-light text-slate-400 font-mono tracking-tighter">
                                                 {item.published_at ? item.published_at.substring(0, 10).replace(/-/g, '.') : '----.--.--'}
                                             </span>
-                                            <span className="text-[8px] px-2 py-0.5 border border-slate-200 text-slate-400 tracking-widest font-bold group-hover:border-[#ff6b00] group-hover:text-[#ff6b00] transition-colors">
-                                                {item.category || 'INFO'}
+                                            <span className="text-[15px] px-2 py-0.5 border border-slate-200 text-slate-400 tracking-widest font-bold group-hover:border-[#ff6b00] group-hover:text-[#ff6b00] transition-colors">
+                                                {categoryNames[item.category?.toLowerCase()] || item.category || 'INFO'}
                                             </span>
                                         </div>
-                                        <h3 className="text-base md:text-lg font-light text-slate-600 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">
+                                        <h3 className="text-[20px] md:text-[22px] font-light text-slate-600 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">
                                             {item.title}
                                         </h3>
                                         <ArrowUpRight className="hidden md:block ml-auto w-4 h-4 text-slate-200 group-hover:text-[#ff6b00] transition-colors" />
@@ -323,7 +329,7 @@ export default function Welcome(props) {
                             <button onClick={() => setIsMenuOpen(false)} className="text-slate-900"><X className="w-6 h-6" /></button>
                         </div>
                         <nav className="flex flex-col items-center justify-center flex-1 gap-8">
-                            <a href="#philosophy" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">Philosophy</a>
+                            <a href="#philosophy" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">Core Values</a>
                             <Link href="/about" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">About</Link>
                             <a href="#news" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">News</a>
                             <a href="#services" onClick={() => setIsMenuOpen(false)} className="text-3xl font-serif italic text-slate-950 tracking-[0.1em] hover:text-[#ff6b00] transition-colors">Services</a>

@@ -2,8 +2,8 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { 
-    LayoutDashboard, 
-    Newspaper, 
+    LayoutDashboard,
+    Newspaper,
     Mail, 
     Settings, 
     ExternalLink, 
@@ -63,7 +63,7 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
                             <h3 className="text-3xl font-serif italic mt-2">Hello, {auth.user.name}</h3>
                             <p className="text-slate-400 text-sm mt-4 max-w-md font-light leading-relaxed">
                                 EverStreakの管理システムへようこそ。
-                                今日も新しい価値の軌跡を残していきましょう。
+                                今日も新しい価値を残していきましょう。
                             </p>
                             <div className="mt-8 flex gap-4">
                                 <Link 

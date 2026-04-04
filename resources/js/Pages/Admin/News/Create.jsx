@@ -54,7 +54,7 @@ export default function Create() {
                                     data.is_published ? 'bg-emerald-500 text-white shadow-lg shadow-emerald-200' : 'bg-slate-200 text-slate-500'
                                 }`}
                             >
-                                {data.is_published ? <><Eye size={14} /> PUBLIC</> : <><EyeOff size={14} /> PRIVATE</>}
+                                {data.is_published ? <><Eye size={14} /> 公開</> : <><EyeOff size={14} /> 非公開</>}
                             </button>
                         </div>
                         
@@ -66,9 +66,9 @@ export default function Create() {
                                     onChange={e => setData('category', e.target.value)}
                                     className="w-full bg-slate-50 border-none rounded-2xl p-4 focus:ring-2 focus:ring-slate-200 transition-all text-sm"
                                 >
-                                    <option value="Notice">Notice</option>
-                                    <option value="Update">Update</option>
-                                    <option value="Event">Event</option>
+                                    <option value="Notice">お知らせ</option>
+                                    <option value="Update">更新情報</option>
+                                    <option value="Event">イベント</option>
                                 </select>
                             </div>
                             <div className="space-y-2">

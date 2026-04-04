@@ -4,6 +4,13 @@ import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Clock, Tag } from 'lucide-react';
 
 export default function Show({ news }) {
+
+    const categoryNames = {
+        'notice': 'お知らせ',
+        'update': '更新情報',
+        'event':  'イベント',
+    };
+
     return (
         <div className="min-h-screen bg-[#fdfdfe] text-slate-900 font-sans selection:bg-orange-100">
             <Head title={`${news.title} | EverStreak News`} />
@@ -36,7 +43,7 @@ export default function Show({ news }) {
                         </div>
                         <div className="flex items-center gap-1.5 text-[10px] px-2.5 py-1 border border-slate-200 text-[#ff6b00] tracking-widest font-bold uppercase">
                             <Tag className="w-3 h-3" />
-                            {news.category || 'Information'}
+                            {categoryNames[news.category?.toLowerCase()] || news.category || 'Information'}
                         </div>
                     </motion.div>
 
