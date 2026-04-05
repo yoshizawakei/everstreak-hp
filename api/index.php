@@ -11,7 +11,13 @@ foreach (['views', 'cache', 'sessions'] as $dir) {
 putenv("VIEW_COMPILED_PATH=/tmp/storage/framework/views");
 putenv("APP_CONFIG_CACHE=/tmp/config.php");
 
-\Artisan::call('migrate --force');
+// 14行目を以下に書き換え
+try {
+    \Artisan::call('migrate', ['--force' => true]);
+    echo "Migration Success: " . \Artisan::output();
+} catch (\Exception $e) {
+    echo "Migration Error: " . $e->getMessage();
+}
 
 // 3. 実行
 require __DIR__ . '/../public/index.php';
