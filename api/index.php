@@ -1,13 +1,11 @@
 <?php
-// すでに存在するか確認してから作成するように修正
-if (!is_dir('/tmp/storage/framework/views')) {
-    mkdir('/tmp/storage/framework/views', 0755, true);
-}
-if (!is_dir('/tmp/storage/framework/cache')) {
-    mkdir('/tmp/storage/framework/cache', 0755, true);
-}
-if (!is_dir('/tmp/storage/framework/sessions')) {
-    mkdir('/tmp/storage/framework/sessions', 0755, true);
+// Vercelの書き込み制限を回避するための設定
+$storagePath = '/tmp/storage/framework';
+foreach (['views', 'cache', 'sessions'] as $dir) {
+    if (!is_dir("$storagePath/$dir")) {
+        mkdir("$storagePath/$dir", 0755, true);
+    }
 }
 
+// 実行
 require __DIR__ . '/../public/index.php';
