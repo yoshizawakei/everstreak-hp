@@ -11,5 +11,7 @@ foreach (['views', 'cache', 'sessions'] as $dir) {
 putenv("VIEW_COMPILED_PATH=/tmp/storage/framework/views");
 putenv("APP_CONFIG_CACHE=/tmp/config.php");
 
+\Artisan::call('migrate --force');
+
 // 3. 実行
 require __DIR__ . '/../public/index.php';
