@@ -1,19 +1,21 @@
 <?php
-// Vercelの読み取り専用制限を回避
-$paths = [
-    '/tmp/storage/framework/views',
-    '/tmp/storage/framework/cache',
-    '/tmp/storage/framework/sessions',
-    '/tmp/storage/logs'
-];
 
-foreach ($paths as $path) {
-    if (!is_dir($path)) {
-        mkdir($path, 0755, true);
+// 1. Vercelの読み取り専用環境でのキャッシュ問題を回避
+putenv('APP_CONFIG_CACHE=/tmp/config.php');
+putenv('APP_ROUTES_CACHE=/tmp/routes.php');
+putenv('APP_SERVICES_CACHE=/tmp/services.php');
+putenv('APP_PACKAGES_CACHE=/tmp/packages.php');
+
+// 2. 必要なディレクトリの作成
+$storagePath = '/tmp/storage/framework';
+foreach (['views', 'cache', 'sessions'] as $dir) {
+    if (!is_dir("$storagePath/$dir")) {
+        mkdir("$storagePath/$dir", 0755, true);
     }
 }
 
-// ログ出力先も一時フォルダに向ける
+// 3. ログの出力先を標準出力に強制（Logs画面で見やすくするため）
 putenv("LOG_CHANNEL=errorlog");
 
+// 4. Laravel本体の起動
 require __DIR__ . '/../public/index.php';
