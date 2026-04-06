@@ -1,5 +1,5 @@
 <?php
-// 1. 書き込み制限回避
+// 1. 書き込み制限回避（ここは変更なし）
 $storagePath = '/tmp/storage/framework';
 foreach (['views', 'cache', 'sessions'] as $dir) {
     if (!is_dir("$storagePath/$dir")) {
@@ -9,29 +9,31 @@ foreach (['views', 'cache', 'sessions'] as $dir) {
 putenv("VIEW_COMPILED_PATH=/tmp/storage/framework/views");
 putenv("APP_CONFIG_CACHE=/tmp/config.php");
 
-// 2. Laravelのオートローダーとアプリケーションを先に読み込む
+// 2. パスを修正して読み込む
+// api/ フォルダから見て一階層上の vendor と bootstrap を指定
 require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-$response = $kernel->handle(
-    $request = Illuminate\Http\Request::capture()
-);
 
-// 3. アプリが起動した後にマイグレーション判定を行う
-if ($request->query('run_migrate') === '1') {
+// 3. アプリの起動準備
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+
+// 4. マイグレーション実行判定
+// handleの前に判定することで、DBエラーが出る前に処理を挟みます
+if (isset($_GET['run_migrate']) && $_GET['run_migrate'] === '1') {
     try {
-        // クラスをフルネームで指定して呼び出す
         \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        echo "<h1>Migration Success!</h1>";
-        echo "<pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+        echo "<h1>Migration Success!</h1><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
         exit;
     } catch (\Exception $e) {
-        echo "<h1>Migration Error</h1>";
-        echo "<pre>" . $e->getMessage() . "</pre>";
+        echo "<h1>Migration Error</h1><pre>" . $e->getMessage() . "</pre>";
         exit;
     }
 }
 
-// 4. 通常のレスポンスを送信
+// 5. 通常の実行
+$response = $kernel->handle(
+    $request = Illuminate\Http\Request::capture()
+);
+
 $response->send();
 $kernel->terminate($request, $response);
