@@ -1,5 +1,5 @@
 <?php
-// 1. 書き込み制限回避
+// 1. Vercelの書き込み制限を回避
 $storagePath = '/tmp/storage/framework';
 foreach (['views', 'cache', 'sessions'] as $dir) {
     if (!is_dir("$storagePath/$dir")) {
@@ -9,30 +9,33 @@ foreach (['views', 'cache', 'sessions'] as $dir) {
 putenv("VIEW_COMPILED_PATH=/tmp/storage/framework/views");
 putenv("APP_CONFIG_CACHE=/tmp/config.php");
 
-// 2. パスを修正して読み込む
+// 2. Laravelの標準的な起動処理
 require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
 
-// 3. アプリの起動準備
+// 3. カーネルを生成し、リクエストを処理（ここでサービスが完全に登録されます）
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
-
-// 4. マイグレーション実行判定
-if (isset($_GET['run_migrate']) && $_GET['run_migrate'] === '1') {
-    try {
-        // ★修正ポイント：Facadeを使わず $app から直接呼び出す
-        $app->make('artisan')->call('migrate', ['--force' => true]);
-        echo "<h1>Migration Success!</h1><pre>" . $app->make('artisan')->output() . "</pre>";
-        exit;
-    } catch (\Exception $e) {
-        echo "<h1>Migration Error</h1><pre>" . $e->getMessage() . "</pre>";
-        exit;
-    }
-}
-
-// 5. 通常の実行
 $response = $kernel->handle(
     $request = Illuminate\Http\Request::capture()
 );
 
+// 4. 【重要】リクエストが migrate 指示だった場合のみ、割り込んで実行
+if ($request->query('run_migrate') === '1') {
+    try {
+        // コンソールコマンドを強制実行
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+
+        echo "<h1>Migration Success!</h1>";
+        echo "<pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+        echo "<a href='/'>Go to Homepage</a>";
+        exit;
+    } catch (\Exception $e) {
+        echo "<h1>Migration Error</h1>";
+        echo "<pre>" . $e->getMessage() . "</pre>";
+        exit;
+    }
+}
+
+// 5. 通常時はそのまま画面を表示
 $response->send();
 $kernel->terminate($request, $response);
