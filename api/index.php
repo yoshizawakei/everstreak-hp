@@ -11,12 +11,16 @@ foreach (['views', 'cache', 'sessions'] as $dir) {
 putenv("VIEW_COMPILED_PATH=/tmp/storage/framework/views");
 putenv("APP_CONFIG_CACHE=/tmp/config.php");
 
-// 14行目を以下に書き換え
-try {
-    \Artisan::call('migrate', ['--force' => true]);
-    echo "Migration Success: " . \Artisan::output();
-} catch (\Exception $e) {
-    echo "Migration Error: " . $e->getMessage();
+if (isset($_GET['run_migrate']) && $_GET['run_migrate'] === '1') {
+    try {
+        \Artisan::call('migrate', ['--force' => true]);
+        echo "Migration Success!<br>";
+        echo nl2br(\Artisan::output());
+        exit;
+    } catch (\Exception $e) {
+        echo "Migration Error: " . $e->getMessage();
+        exit;
+    }
 }
 
 // 3. 実行
