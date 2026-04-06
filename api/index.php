@@ -1,5 +1,5 @@
 <?php
-// 1. 書き込み制限回避（継続）
+// 1. 書き込み制限回避
 $storagePath = '/tmp/storage';
 foreach (['/framework/views', '/framework/cache', '/framework/sessions', '/bootstrap/cache'] as $dir) {
     if (!is_dir($storagePath . $dir))
@@ -8,34 +8,35 @@ foreach (['/framework/views', '/framework/cache', '/framework/sessions', '/boots
 putenv("APP_CONFIG_CACHE={$storagePath}/bootstrap/cache/config.php");
 putenv("VIEW_COMPILED_PATH={$storagePath}/framework/views");
 
-// 2. 環境変数の固定
+// 2. 環境変数の設定
 putenv("DB_CONNECTION=pgsql");
 $_ENV['DB_CONNECTION'] = 'pgsql';
 
-require __DIR__ . '/../vendor/autoload.php';
-$app = require_once __DIR__ . '/../bootstrap/app.php';
-
-// 3. 【強制突破】直接SQLで全テーブルを削除してマイグレーション
+// 3. 【最重要】マイグレーション実行
 if (isset($_GET['run_migrate'])) {
     try {
-        echo "<h1>Cleaning Database...</h1>";
-        // 全テーブルを強制削除するSQL
-        $sql = "DROP SCHEMA public CASCADE; CREATE SCHEMA public;";
-        \Illuminate\Support\Facades\DB::statement($sql);
-        echo "<p>Database cleaned!</p>";
+        // A. PHP標準機能でDBを更地にする（Laravelの初期化不要）
+        $dsn = "pgsql:host=" . env('DB_HOST') . ";port=5432;dbname=neondb";
+        $pdo = new PDO($dsn, env('DB_USERNAME'), env('DB_PASSWORD'));
+        $pdo->exec("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
+        echo "<h1>1. Database Cleaned!</h1>";
 
-        // 改めてマイグレーション実行
+        // B. ここで初めてLaravelを起動してマイグレーション
+        require __DIR__ . '/../vendor/autoload.php';
+        $app = require_once __DIR__ . '/../bootstrap/app.php';
         $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
         $artisan->call('migrate', ['--force' => true]);
 
-        echo "<h1>Migration Success!</h1><pre>" . $artisan->output() . "</pre>";
+        echo "<h1>2. Migration Success!</h1><pre>" . $artisan->output() . "</pre>";
     } catch (\Exception $e) {
-        echo "<h1>Still Error...</h1><pre>" . $e->getMessage() . "</pre>";
+        echo "<h1>Error</h1><pre>" . $e->getMessage() . "</pre>";
     }
     exit;
 }
 
-// 通常起動
+// 4. 通常起動
+require __DIR__ . '/../vendor/autoload.php';
+$app = require_once __DIR__ . '/../bootstrap/app.php';
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle($request = Illuminate\Http\Request::capture());
 $response->send();
