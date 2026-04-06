@@ -1,5 +1,9 @@
 <?php
-// 1. Vercelの書き込み制限を回避
+// 1. 環境変数の競合を物理的に排除
+putenv("DB_CONNECTION=pgsql");
+$_ENV['DB_CONNECTION'] = 'pgsql';
+
+// 2. Vercelの書き込み制限回避
 $storagePath = '/tmp/storage/framework';
 foreach (['views', 'cache', 'sessions'] as $dir) {
     if (!is_dir("$storagePath/$dir")) {
@@ -7,31 +11,25 @@ foreach (['views', 'cache', 'sessions'] as $dir) {
     }
 }
 putenv("VIEW_COMPILED_PATH=/tmp/storage/framework/views");
-putenv("APP_CONFIG_CACHE=/tmp/config.php");
 
-// 2. ★重要：Vercelの自動生成変数をプログラム側で強制的に無視・上書きする
-putenv("DB_CONNECTION=pgsql");
-$_ENV['DB_CONNECTION'] = 'pgsql';
-
-// 3. Laravelの起動
+// 3. Laravelを最小限の状態でロード
 require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 
-// 4. マイグレーション判定
-if (isset($_GET['run_migrate']) && $_GET['run_migrate'] === '1') {
-    $kernel->handle($request = Illuminate\Http\Request::capture());
+// 4. 【本番】テーブル作成（マイグレーション）を強制実行
+if (isset($_GET['run_migrate'])) {
     try {
-        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-        echo "<h1>Migration Done!</h1><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
-        exit;
+        $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
+        $status = $artisan->call('migrate', ['--force' => true]);
+        echo "<h1>Migration Success!</h1><pre>" . $artisan->output() . "</pre>";
     } catch (\Exception $e) {
         echo "<h1>Migration Error</h1><pre>" . $e->getMessage() . "</pre>";
-        exit;
     }
+    exit;
 }
 
-// 5. 通常表示
-$response = $kernel->handle(Illuminate\Http\Request::capture());
+// 5. 通常の起動
+$kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
+$response = $kernel->handle($request = Illuminate\Http\Request::capture());
 $response->send();
 $kernel->terminate($request, $response);
