@@ -2,9 +2,12 @@
     "$schema": "https://www.schemastore.org/package.json",
     "private": true,
     "type": "module",
+    "homepage": "https://yoshizawakei.github.io/everstreak-hp",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "dev": "vite",
+        "predeploy": "npm run build",
+        "deploy": "gh-pages -d public/build"
     },
     "devDependencies": {
         "@headlessui/react": "^2.0.0",
@@ -15,6 +18,7 @@
         "autoprefixer": "^10.4.12",
         "axios": "^1.11.0",
         "concurrently": "^9.0.1",
+        "gh-pages": "^6.3.0",
         "laravel-vite-plugin": "^2.0.0",
         "postcss": "^8.4.31",
         "react": "^18.2.0",
