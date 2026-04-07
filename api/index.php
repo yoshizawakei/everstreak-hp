@@ -12,22 +12,28 @@ putenv("VIEW_COMPILED_PATH={$storagePath}/framework/views");
 putenv("DB_CONNECTION=pgsql");
 $_ENV['DB_CONNECTION'] = 'pgsql';
 
-// 3. 【最重要】マイグレーション実行
+// 3. 【強制突破】マイグレーション実行
 if (isset($_GET['run_migrate'])) {
     try {
-        // A. PHP標準機能でDBを更地にする（Laravelの初期化不要）
-        $dsn = "pgsql:host=" . env('DB_HOST') . ";port=5432;dbname=neondb";
-        $pdo = new PDO($dsn, env('DB_USERNAME'), env('DB_PASSWORD'));
+        // 直接値を指定してDBを更地にする（env()を使わない）
+        $host = 'ep-wispy-pine-anpdl125-pooler.c-6.us-east-1.aws.neon.tech';
+        $user = 'neondb_owner';
+        $pass = 'npg_7B9dNIqtGPHo';
+
+        $dsn = "pgsql:host=$host;port=5432;dbname=neondb";
+        $pdo = new PDO($dsn, $user, $pass);
         $pdo->exec("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
         echo "<h1>1. Database Cleaned!</h1>";
 
-        // B. ここで初めてLaravelを起動してマイグレーション
+        // Laravelを起動
         require __DIR__ . '/../vendor/autoload.php';
         $app = require_once __DIR__ . '/../bootstrap/app.php';
         $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
-        $artisan->call('migrate', ['--force' => true]);
 
+        // マイグレーション実行
+        $artisan->call('migrate', ['--force' => true]);
         echo "<h1>2. Migration Success!</h1><pre>" . $artisan->output() . "</pre>";
+
     } catch (\Exception $e) {
         echo "<h1>Error</h1><pre>" . $e->getMessage() . "</pre>";
     }
