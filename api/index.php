@@ -1,54 +1,47 @@
 <?php
-// 1. 書き込み制限回避用のディレクトリ作成
+// 1. 書き込み可能な一時ディレクトリの設定
 $storagePath = '/tmp/storage';
 foreach (['/framework/views', '/framework/cache', '/framework/sessions', '/bootstrap/cache'] as $dir) {
     if (!is_dir($storagePath . $dir))
         mkdir($storagePath . $dir, 0755, true);
 }
 
-// 2. 環境変数の設定
-putenv("DB_CONNECTION=pgsql");
-$_ENV['DB_CONNECTION'] = 'pgsql';
+// 2. Laravelの内部パスを環境変数で強制固定（読み込み前に実行）
+putenv("APP_CONFIG_CACHE={$storagePath}/bootstrap/cache/config.php");
+putenv("APP_SERVICES_CACHE={$storagePath}/bootstrap/cache/services.php");
+putenv("APP_PACKAGES_CACHE={$storagePath}/bootstrap/cache/packages.php");
 putenv("VIEW_COMPILED_PATH={$storagePath}/framework/views");
+putenv("DB_CONNECTION=pgsql");
 
-// 3. 【一撃突破】マイグレーション実行
+// 3. マイグレーション実行モード
 if (isset($_GET['run_migrate'])) {
     try {
-        $host = 'ep-wispy-pine-anpdl125-pooler.c-6.us-east-1.aws.neon.tech';
-        $user = 'neondb_owner';
-        $pass = 'npg_7B9dNIqtGPHo';
-
-        // A. DBの掃除（成功済みロジック）
-        $dsn = "pgsql:host=$host;port=5432;dbname=neondb";
-        $pdo = new PDO($dsn, $user, $pass);
+        // DBのクリーンアップ（前回成功したロジック）
+        $dsn = "pgsql:host=ep-wispy-pine-anpdl125-pooler.c-6.us-east-1.aws.neon.tech;port=5432;dbname=neondb";
+        $pdo = new PDO($dsn, 'neondb_owner', 'npg_7B9dNIqtGPHo');
         $pdo->exec("DROP SCHEMA public CASCADE; CREATE SCHEMA public;");
         $pdo = null;
-        echo "<h1>1. Database Cleaned!</h1>";
 
-        // B. Laravelの起動
         require __DIR__ . '/../vendor/autoload.php';
         $app = require_once __DIR__ . '/../bootstrap/app.php';
+        $app->useStoragePath($storagePath); // パスの再設定
 
-        // C. 【重要】Laravelのキャッシュパスをメモリ上で強制書き換え
-        $app->useStoragePath($storagePath);
-        $app->instance('path.config', $storagePath . '/bootstrap/cache/config.php'); // 設定キャッシュ先も変更
-
-        // D. マイグレーション実行
         $artisan = $app->make(Illuminate\Contracts\Console\Kernel::class);
-        $artisan->call('migrate', ['--force' => true, '--step' => true]);
-
-        echo "<h1>2. Migration Success!</h1><pre>" . $artisan->output() . "</pre>";
-
+        $artisan->call('migrate', ['--force' => true]);
+        echo "<h1>Migration Success!</h1><pre>" . $artisan->output() . "</pre>";
     } catch (\Exception $e) {
-        echo "<h1>Error Detail</h1><pre>" . $e->getMessage() . "</pre>";
+        echo "<h1>Migration Error</h1><pre>" . $e->getMessage() . "</pre>";
     }
     exit;
 }
 
-// 通常起動（こちらにもパス修正が必要）
+// 4. 通常のサイト表示（ここが500エラーの原因でした）
 require __DIR__ . '/../vendor/autoload.php';
 $app = require_once __DIR__ . '/../bootstrap/app.php';
+
+// ★重要：通常起動時にも一時ディレクトリを使うよう指示
 $app->useStoragePath($storagePath);
+
 $kernel = $app->make(Illuminate\Contracts\Http\Kernel::class);
 $response = $kernel->handle($request = Illuminate\Http\Request::capture());
 $response->send();
