@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\News;
 use App\Models\Contact;
+use App\Models\User;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -38,9 +40,28 @@ class WelcomeController extends Controller
             'message' => 'required|string',
         ]);
 
-        Contact::create($validated);
+        // 1. DBに保存
+        $contact = Contact::create($validated);
 
-        // 送信後はトップページへ戻る（Inertiaのフラッシュメッセージ対応）
+        // 2. 管理者（最初のユーザー）を取得
+        $admin = User::first();
+
+        if ($admin) {
+            // 3. 通知メールを送信
+            Mail::raw(
+                "EverStreak HPから新しいお問い合わせがありました。\n\n" .
+                "お名前: {$contact->name} 様\n" .
+                "メール: {$contact->email}\n\n" .
+                "本文:\n{$contact->message}\n\n" .
+                "▼管理画面で確認する\n" . route('admin.contacts.index'),
+                function ($message) use ($admin) {
+                    $message->to($admin->email)
+                        ->subject('【通知】HPからお問い合わせが届きました');
+                } .
+                "このメールは送信専用です。"
+            );
+        }
+
         return redirect()->back()->with('success', 'Sent Successfully');
     }
 }
