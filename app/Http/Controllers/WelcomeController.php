@@ -43,22 +43,22 @@ class WelcomeController extends Controller
         // 1. DBに保存
         $contact = Contact::create($validated);
 
-        // 2. 管理者（最初のユーザー）を取得
-        $admin = User::first();
+        // 2. 全ユーザーを取得（User::all() に変更）
+        $users = User::all();
 
-        if ($admin) {
-            // 3. 通知メールを送信
+        // 3. ループで全員に送信
+        foreach ($users as $user) {
             Mail::raw(
                 "EverStreak HPから新しいお問い合わせがありました。\n\n" .
                 "お名前: {$contact->name} 様\n" .
                 "メール: {$contact->email}\n\n" .
                 "本文:\n{$contact->message}\n\n" .
-                "▼管理画面で確認する\n" . route('admin.contacts.index'),
-                function ($message) use ($admin) {
-                    $message->to($admin->email)
+                "▼管理画面で確認する\n" . route('admin.contacts.index') . "\n\n" .
+                "※このメールは送信専用です。",
+                function ($message) use ($user) {
+                    $message->to($user->email)
                         ->subject('【通知】HPからお問い合わせが届きました');
-                } .
-                "このメールは送信専用です。"
+                }
             );
         }
 
