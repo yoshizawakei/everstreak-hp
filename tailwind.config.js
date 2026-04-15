@@ -7,9 +7,11 @@ export default {
     theme: {
         extend: {
             fontFamily: {
-                serif: ['"Noto Serif JP"', 'serif'],
+                // 日本語の明朝体を主役に、英字をそれに合わせる
+                serif: ['"Noto Serif JP"', '"Playfair Display"', 'serif'],
+                // 日本語のゴシック体を主役に、英字をそれに合わせる
+                sans: ['"Noto Sans JP"', 'Montserrat', 'sans-serif'],
             },
-            // 揺らぎ（Fluid）を標準クラスとして登録
             animation: {
                 'fluid-slow': 'fluid 20s ease-in-out infinite',
             },
