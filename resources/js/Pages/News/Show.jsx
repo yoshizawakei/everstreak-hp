@@ -3,19 +3,45 @@ import { motion } from 'framer-motion';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Clock, Tag } from 'lucide-react';
 
-export default function Show({ news }) {
+// --- 追加: SEO用コンポーネント ---
+const Seo = ({ title, description, image }) => {
+    const siteName = "株式会社EverStreak";
+    const fullTitle = title ? `${title} | ${siteName}` : siteName;
+    
+    return (
+        <Head>
+            <title>{fullTitle}</title>
+            <meta name="description" content={description} />
+            {/* OGP設定（SNS共有時の見栄え） */}
+            <meta property="og:title" content={fullTitle} />
+            <meta property="og:description" content={description} />
+            {image && <meta property="og:image" content={image} />}
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Sans+JP:wght@300&family=Montserrat:wght@300;600&display=swap" rel="stylesheet" />
+        </Head>
+    );
+};
 
+export default function Show({ news }) {
     const categoryNames = {
         'notice': 'お知らせ',
         'update': '更新情報',
         'event':  'イベント',
     };
 
+    // SEO用のディスクリプション（HTMLタグを除去して先頭100文字を抽出）
+    const seoDescription = news.content 
+        ? news.content.replace(/<[^>]*>?/gm, '').substring(0, 100) + '...'
+        : "EverStreakからの最新ニュースをお届けします。";
+
     return (
         <div className="min-h-screen bg-[#fdfdfe] text-slate-900 font-sans selection:bg-orange-100">
-            <Head title={`${news.title} | EverStreak News`} />
+            {/* 記事固有の情報でSEOを最適化 */}
+            <Seo 
+                title={news.title} 
+                description={seoDescription}
+                image={news.image_path ? `/storage/${news.image_path}` : null}
+            />
 
-            {/* --- Header --- */}
             <header className="fixed top-0 w-full z-50 px-6 py-6 md:px-10 flex justify-between items-center bg-[#fdfdfe]/80 backdrop-blur-md border-b border-slate-900/5">
                 <Link href="/" className="text-xl md:text-2xl font-serif italic tracking-tighter hover:opacity-70 transition-opacity">
                     EverStreak
@@ -30,11 +56,10 @@ export default function Show({ news }) {
 
             <main className="pt-32 pb-24 px-6 md:px-0">
                 <article className="max-w-3xl mx-auto">
-                    {/* --- Meta Info --- */}
+                    {/* Meta Info */}
                     <motion.div 
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
                         className="flex flex-wrap items-center gap-4 mb-8"
                     >
                         <div className="flex items-center gap-1.5 text-xs font-mono text-slate-400">
@@ -47,51 +72,48 @@ export default function Show({ news }) {
                         </div>
                     </motion.div>
 
-                    {/* --- Title --- */}
+                    {/* Title */}
                     <motion.h1 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.1 }}
                         className="text-3xl md:text-5xl font-serif font-extralight leading-[1.3] text-slate-950 mb-12"
                     >
                         {news.title}
                     </motion.h1>
 
-                    {/* --- Featured Image --- */}
+                    {/* Featured Image */}
                     {news.image_path && (
                         <motion.div 
                             initial={{ opacity: 0, scale: 0.98 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 1.2, delay: 0.2 }}
-                            className="mb-16 aspect-video overflow-hidden rounded-3xl shadow-2xl shadow-slate-200"
+                            className="mb-16 aspect-video overflow-hidden rounded-3xl shadow-2xl shadow-slate-200 bg-slate-50"
                         >
                             <img 
                                 src={`/storage/${news.image_path}`} 
-                                alt="" 
+                                alt={news.title} 
                                 className="w-full h-full object-cover"
                             />
                         </motion.div>
                     )}
 
-                    {/* --- Content (Rich Text対応) --- */}
+                    {/* Content (Rich Text対応) */}
                     <motion.div 
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        transition={{ duration: 1, delay: 0.4 }}
                         className="prose prose-slate prose-lg max-w-none 
                                    prose-headings:font-serif prose-headings:font-light prose-headings:text-slate-900
-                                   prose-p:leading-[2.0] prose-p:text-slate-600 prose-p:font-light
+                                   prose-p:leading-[2.2] prose-p:text-slate-600 prose-p:font-light
                                    prose-a:text-[#ff6b00] prose-a:no-underline hover:prose-a:underline
                                    prose-strong:text-slate-900 prose-strong:font-bold
                                    prose-img:rounded-2xl prose-img:shadow-lg"
                         dangerouslySetInnerHTML={{ __html: news.content }}
                     />
 
-                    {/* --- Footer Button --- */}
+                    {/* Footer Button */}
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.6 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
                         className="mt-24 pt-12 border-t border-slate-100 flex justify-center"
                     >
                         <Link 

@@ -2,6 +2,21 @@ import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ArrowLeft, CheckCircle2, Mic2, Calendar, Code2 } from 'lucide-react';
 
+// --- 追加: SEO用コンポーネント ---
+const Seo = ({ title, description }) => {
+    const siteName = "株式会社EverStreak";
+    const fullTitle = title ? `${title} | ${siteName}` : siteName;
+    const defaultDesc = "EverStreakが提供する3つのコアサービス（イベント企画・運営、プロフェッショナル司会、Web制作・保守）についてご紹介します。オフラインの感動とオンラインの技術を融合し、お客様のプロジェクトを成功へ導きます。";
+
+    return (
+        <Head>
+            <title>{fullTitle}</title>
+            <meta name="description" content={description || defaultDesc} />
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Sans+JP:wght@300&family=Montserrat:wght@300;600&display=swap" rel="stylesheet" />
+        </Head>
+    );
+};
+
 export default function Services() {
     const serviceDetails = [
         {
@@ -29,7 +44,11 @@ export default function Services() {
 
     return (
         <div className="min-h-screen bg-[#fdfdfe] text-slate-900 font-sans selection:bg-orange-100">
-            <Head title="Services | EverStreak" />
+            {/* 変更点: サービス一覧ページ用のSEO設定 */}
+            <Seo 
+                title="事業内容・サービス一覧" 
+                description="イベント企画・運営から司会者派遣、LaravelによるWebシステム開発まで、EverStreakの幅広いサービスをご案内。専門領域を横断し、最高の結果を出すチームとして伴走します。" 
+            />
 
             <header className="fixed top-0 w-full z-50 px-6 py-6 flex justify-between items-center backdrop-blur-md bg-white/80 border-b border-slate-900/5">
                 <Link href="/" className="text-xl font-serif italic tracking-tighter">EverStreak</Link>

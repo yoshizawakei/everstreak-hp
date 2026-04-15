@@ -1,8 +1,24 @@
 import React from 'react';
 import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionValue, animate } from 'framer-motion';
-import { Head, Link, useForm } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react'; // Head は Seo 内で使用
 import { useRef, useState, useEffect } from 'react';
 import { ArrowRight, Menu, X, Send, Instagram, Mail, ArrowUpRight } from 'lucide-react';
+
+// --- 追加: SEO用コンポーネント ---
+const Seo = ({ title, description }) => {
+    const siteName = "株式会社EverStreak";
+    const fullTitle = title ? `${title} | ${siteName}` : siteName;
+    const defaultDesc = "繋がりが、価値を定義する。EverStreakは、ITエンジニアリング、イベント企画、Web制作を通じて、新しい価値を創造するクリエイティブチームです。";
+
+    return (
+        <Head>
+            <title>{fullTitle}</title>
+            <meta name="description" content={description || defaultDesc} />
+            {/* フォントの読み込みもここに集約 */}
+            <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Sans+JP:wght@300&family=Montserrat:wght@300;600&display=swap" rel="stylesheet" />
+        </Head>
+    );
+};
 
 const OpeningAnimation = ({ onStartExit }) => (
     <motion.div
@@ -110,10 +126,11 @@ export default function Welcome(props) {
 
     return (
         <div ref={containerRef} className="relative min-h-[550vh] overflow-x-hidden bg-[#fdfdfe] selection:bg-orange-100 text-slate-900 font-sans tracking-tight leading-relaxed antialiased">
-            <Head>
-                <title>EverStreak | 繋がりが、価値を定義する</title>
-                <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Sans+JP:wght@300&family=Montserrat:wght@300;600&display=swap" rel="stylesheet" />
-            </Head>
+            {/* 変更点: ページ固有のタイトルと説明文を設定 */}
+            <Seo 
+                title="繋がりが、価値を定義する" 
+                description="株式会社EverStreakの公式サイトです。イベント企画・運営、司会・MC、WEB制作・運営・保守を通じて、人と人との繋がりから生まれる新しい価値を創造します。" 
+            />
 
             <motion.header 
                 style={{ backgroundColor: headerBg, backdropFilter: "blur(12px)" }}

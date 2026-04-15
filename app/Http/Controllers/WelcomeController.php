@@ -41,7 +41,9 @@ class WelcomeController extends Controller
         ]);
 
         // 1. DBに保存
-        $contact = Contact::create($validated);
+        $contact = \DB::transaction(function () use ($validated) {
+            return Contact::create($validated);
+        });
 
         // 2. 全ユーザーを取得（User::all() に変更）
         $users = User::all();
@@ -53,11 +55,12 @@ class WelcomeController extends Controller
                 "お名前: {$contact->name} 様\n" .
                 "メール: {$contact->email}\n\n" .
                 "本文:\n{$contact->message}\n\n" .
-                "▼管理画面で確認する\n" . route('admin.contacts.index') . "\n\n" .
-                "※このメールは送信専用です。",
-                function ($message) use ($user) {
+                "▼管理画面で確認する\n" . route('admin.contacts.index'),
+                function ($message) use ($user, $contact) {
                     $message->to($user->email)
-                        ->subject('【通知】HPからお問い合わせが届きました');
+                        ->from(config('mail.from.address'), config('mail.from.name')) // 送信元を明示
+                        ->replyTo($contact->email, $contact->name) // そのまま返信できるように設定
+                        ->subject('【EverStreak】新着お問い合わせ（' . $contact->name . '様）');
                 }
             );
         }
