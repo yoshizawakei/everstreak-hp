@@ -36,7 +36,7 @@ export default function About() {
             <header className="fixed top-0 w-full z-[80] px-6 py-4 md:px-10 flex justify-between items-center border-b border-slate-900/5 bg-[#fdfdfe]/80 backdrop-blur-md">
                 <Link 
                     href="/" 
-                    className="text-xl md:text-2xl font-serif italic tracking-tighter"
+                    className="text-xl md:text-2xl font-serif font-medium italic tracking-tighter" style={{ fontFamily: "'Noto Serif JP', 'Playfair Display', serif" }}
                 >
                     EverStreak
                 </Link>
@@ -62,7 +62,7 @@ export default function About() {
                     transition={{ duration: 1 }}
                     className="mb-32"
                 >
-                    <span className="text-[#ff6b00] text-[15px] tracking-[0.4em] font-bold uppercase block mb-6">About Our Company</span>
+                    <span className="text-[#ff6b00] text-[23px] tracking-[0.2em] font-bold uppercase mb-8 block" style={{ fontFamily: "'Montserrat', sans-serif" }}>About Our Company</span>
                     <h1 className="text-3xl md:text-5xl font-serif italic leading-tight mb-12">
                         つながりから、<br />新しい価値の軌跡を。
                     </h1>

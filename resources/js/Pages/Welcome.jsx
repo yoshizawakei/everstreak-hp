@@ -185,13 +185,13 @@ export default function Welcome(props) {
                 <section id="philosophy" className="scroll-mt-40 pt-25 md:pt-24 pb-40 md:pb-[40vh] px-6 md:px-[15vw] flex flex-col justify-center">
                     <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 1.2 }}>
                         <span className="text-[#ff6b00] text-[23px] tracking-[0.2em] font-bold uppercase mb-8 block" style={{ fontFamily: "'Montserrat', sans-serif" }}>Core Values</span>
-                        <h2 className="text-2xl md:text-5xl lg:text-4xl font-extralight leading-[1.8] text-slate-900 mb-12 group cursor-default" style={{ fontFamily: "'Noto Serif JP', sans-serif", fontWeight: 200 }}>
+                        <h2 className="text-2xl md:text-5xl lg:text-4xl font-extralight leading-[1.8] text-slate-900 mb-12 group cursor-default" style={{ fontFamily: "'Noto Serif JP', sans-serif", fontWeight: 500 }}>
                             一人ひとりの衝動をシェアして、<br />
                             <span className="italic text-[#ff6b00] underline underline-offset-[12px] md:underline-offset-[16px] decoration-1 transition-all group-hover:text-orange-600" style={{ fontFamily: "'Noto Serif JP', 'Playfair Display', serif" }}>
                                 共鳴しあう、最高のチームへ。
                             </span>
                         </h2>
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 text-slate-500 leading-relaxed text-base md:text-[18px] font-light">
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-20 text-slate-800 leading-relaxed text-base md:text-[18px] font-light">
                             <p>偶然の出会いを、必然の「化学反応」へ。EverStreakは、人と人がダイレクトに響き合う体験をクリエイトします。バラバラだったエネルギーが一つにまとまり、大きな流れとなって社会を動かしていく。そのプロセスこそが、私たちの真髄です。</p>
                             <p>挑戦者のマインドと、表現者のインスピレーション。すべてのピースが「つながり」という引力で引き寄せられたとき、見たことのない新しい価値が定義されます。</p>
                         </div>
@@ -282,7 +282,7 @@ export default function Welcome(props) {
                                         <div className="w-12 h-12 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-[#ff6b00]/5 group-hover:border-[#ff6b00]/20 transition-all duration-500">
                                             <Mail className="w-4 h-4 text-slate-400 group-hover:text-[#ff6b00]" strokeWidth={1.5} />
                                         </div>
-                                        <p className="text-base text-slate-500 group-hover:text-slate-900 transition-colors tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 300 }}>hello@everstreak.com</p>
+                                        <p className="text-base text-slate-500 group-hover:text-slate-900 transition-colors tracking-tight" style={{ fontFamily: "'Montserrat', sans-serif", fontWeight: 300 }}>info@everstreak.co.jp</p>
                                     </div>
                                     <div className="flex items-center gap-6 group cursor-pointer">
                                         <div className="w-12 h-12 rounded-full border border-slate-100 flex items-center justify-center group-hover:bg-[#ff6b00]/5 group-hover:border-[#ff6b00]/20 transition-all duration-500">
