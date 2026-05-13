@@ -2,96 +2,205 @@ import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 
-// --- 追加: SEO用コンポーネント ---
+// --- SEO ---
 const Seo = ({ title, description }) => {
+
     const siteName = "株式会社EverStreak";
-    const fullTitle = title ? `${title} | ${siteName}` : siteName;
-    const defaultDesc = "株式会社EverStreakの会社概要ページです。2025年12月設立。東京・渋谷を拠点に、イベント企画、司会、Web制作の3つの事業を軸に、新しい価値の軌跡を創り出します。";
+
+    const fullTitle = title
+        ? `${title} | ${siteName}`
+        : siteName;
+
+    const defaultDesc =
+        "ひとつの出会いが、景色を変えていく。EverStreakは、人と人とのつながりから、新しい価値を創造するクリエイティブチームです。";
 
     return (
         <Head>
             <title>{fullTitle}</title>
-            <meta name="description" content={description || defaultDesc} />
-            {/* 外部フォントの読み込みをここに集約 */}
-            <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Sans+JP:wght@300&family=Montserrat:wght@300;600&display=swap" rel="stylesheet" />
+
+            <meta
+                name="description"
+                content={description || defaultDesc}
+            />
+
+            <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@200;500&display=swap"
+                rel="stylesheet"
+            />
         </Head>
     );
 };
 
 export default function About() {
+
     const companyInfo = [
-        { label: "会社名", value: "株式会社EverStreak" },
-        { label: "代表取締役", value: "大脇 拓仁" },
-        { label: "所在地", value: "〒150-0012 東京都渋谷区広尾1-2-1 ヒカリビル4階" },
-        { label: "設立", value: "2025年12月" },
-        { label: "事業内容", value: "イベント企画・運営、司会・MC、WEB制作・管理" }
+        {
+            label: "会社名",
+            value: "株式会社EverStreak"
+        },
+        {
+            label: "代表取締役",
+            value: "大脇 拓仁"
+        },
+        {
+            label: "所在地",
+            value: "〒150-0012 東京都渋谷区広尾1-2-1 ヒカリビル4階"
+        },
+        {
+            label: "設立",
+            value: "2025年12月"
+        },
+        {
+            label: "事業内容",
+            value: "イベント企画・運営、司会・MC、WEB制作・管理"
+        }
     ];
 
     return (
-        <div className="relative min-h-screen bg-[#fdfdfe] text-slate-900 font-sans selection:bg-orange-100">
-            {/* 会社概要専用のメタ情報設定 */}
+
+        <div
+            className="relative min-h-screen bg-[#fdfdfe] text-slate-900 selection:bg-orange-100"
+            style={{
+                fontFamily: "'Inter', 'Noto Sans JP', sans-serif"
+            }}
+        >
+
             <Seo title="会社概要" />
 
-            {/* 1. 固定ヘッダー */}
-            <header className="fixed top-0 w-full z-[80] px-6 py-4 md:px-10 flex justify-between items-center border-b border-slate-900/5 bg-[#fdfdfe]/80 backdrop-blur-md">
-                <Link 
-                    href="/" 
-                    className="text-xl md:text-2xl font-serif font-medium italic tracking-tighter" style={{ fontFamily: "'Noto Serif JP', 'Playfair Display', serif" }}
+            {/* Header */}
+            <header className="fixed top-0 w-full z-[80] px-6 py-5 md:px-10 flex justify-between items-center border-b border-slate-900/5 bg-[#fdfdfe]/80 backdrop-blur-md">
+
+                <Link
+                    href="/"
+                    className="text-xl md:text-2xl font-medium tracking-tighter"
+                    style={{
+                        fontFamily: "'Noto Serif JP', serif"
+                    }}
                 >
                     EverStreak
                 </Link>
 
-                <Link 
-                    href="/" 
-                    className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] font-bold text-slate-400 hover:text-slate-900 transition-colors"
+                <Link
+                    href="/"
+                    className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-medium text-slate-400 hover:text-slate-900 transition-colors"
                 >
-                    <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" /> 
+
+                    <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
+
                     Back to Home
+
                 </Link>
+
             </header>
 
-            {/* 2. メインコンテンツ */}
-            <main 
-                className="relative w-full px-6 md:px-[15vw] pb-24" 
-                style={{ paddingTop: '160px' }} 
+            {/* Main */}
+            <main
+                className="relative w-full px-6 md:px-[15vw] pb-24"
+                style={{
+                    paddingTop: '160px'
+                }}
             >
-                {/* Hero Section */}
-                <motion.section 
+
+                {/* Hero */}
+                <motion.section
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 1 }}
                     className="mb-32"
                 >
-                    <span className="text-[#ff6b00] text-[23px] tracking-[0.2em] font-bold uppercase mb-8 block" style={{ fontFamily: "'Montserrat', sans-serif" }}>About Our Company</span>
-                    <h1 className="text-3xl md:text-5xl font-serif italic leading-tight mb-12">
-                        つながりから、<br />新しい価値の軌跡を。
+
+                    <span
+                        className="text-[#ff6b00] text-[20px] tracking-[0.18em] font-semibold uppercase mb-8 block"
+                    >
+                        About Our Company
+                    </span>
+
+                    <h1
+                        className="text-3xl md:text-5xl leading-[1.5] text-slate-900 mb-14"
+                        style={{
+                            fontFamily: "'Noto Serif JP', serif",
+                            fontWeight: 500,
+                            letterSpacing: "-0.03em"
+                        }}
+                    >
+                        ひとつの出会いが、
+                        <br />
+                        景色を変えていく。
                     </h1>
-                    <div className="w-full aspect-video rounded-3xl overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 shadow-2xl bg-slate-100">
-                        <img 
-                            src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000" 
-                            alt="株式会社EverStreak オフィスイメージ" 
-                            className="w-full h-full object-cover" 
+
+                    <div className="w-full aspect-video rounded-[32px] overflow-hidden grayscale hover:grayscale-0 transition-all duration-1000 shadow-[0_30px_80px_-20px_rgba(0,0,0,0.08)] bg-slate-100">
+
+                        <img
+                            src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2000"
+                            alt="株式会社EverStreak オフィスイメージ"
+                            className="w-full h-full object-cover"
                         />
+
                     </div>
+
                 </motion.section>
 
-                {/* Company Profile Table */}
+                {/* Profile */}
                 <section className="max-w-4xl">
-                    <h2 className="text-2xl font-serif mb-12 border-b border-slate-100 pb-4">Corporate Profile</h2>
+
+                    <h2
+                        className="text-2xl md:text-3xl mb-12 border-b border-slate-100 pb-5 text-slate-900"
+                        style={{
+                            fontFamily: "'Noto Serif JP', serif",
+                            fontWeight: 500
+                        }}
+                    >
+                        Corporate Profile
+                    </h2>
+
                     <dl className="divide-y divide-slate-100">
+
                         {companyInfo.map((item) => (
-                            <div key={item.label} className="py-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-                                <dt className="text-[10px] uppercase tracking-widest font-bold text-slate-400">{item.label}</dt>
-                                <dd className="md:col-span-2 text-lg font-light text-slate-600 leading-relaxed">{item.value}</dd>
+
+                            <div
+                                key={item.label}
+                                className="py-7 grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-8"
+                            >
+
+                                <dt
+                                    className="text-[10px] uppercase tracking-[0.25em] font-semibold text-slate-400"
+                                >
+                                    {item.label}
+                                </dt>
+
+                                <dd className="md:col-span-2 text-[17px] md:text-lg font-light text-slate-600 leading-[2] tracking-[0.01em]">
+                                    {item.value}
+                                </dd>
+
                             </div>
+
                         ))}
+
                     </dl>
+
                 </section>
+
             </main>
 
-            <footer className="py-12 border-t border-slate-100 text-center">
-                <p className="text-[9px] tracking-[0.5em] text-slate-300 uppercase">© 2026 EverStreak Inc.</p>
+            {/* Footer */}
+            <footer className="py-14 border-t border-slate-100 text-center bg-slate-50/50">
+
+                <div
+                    className="text-2xl text-slate-200 mb-4"
+                    style={{
+                        fontFamily: "'Noto Serif JP', serif"
+                    }}
+                >
+                    EverStreak
+                </div>
+
+                <p className="text-[8px] tracking-[0.4em] text-slate-400 font-medium uppercase ml-[0.4em]">
+                    © 2026 EverStreak Inc.
+                </p>
+
             </footer>
+
         </div>
+
     );
 }
