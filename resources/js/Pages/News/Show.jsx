@@ -16,7 +16,10 @@ const Seo = ({ title, description, image }) => {
             <meta property="og:title" content={fullTitle} />
             <meta property="og:description" content={description} />
             {image && <meta property="og:image" content={image} />}
-            <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@200;500&family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=Noto+Sans+JP:wght@300&family=Montserrat:wght@300;600&display=swap" rel="stylesheet" />
+            <link
+                href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@200;500&display=swap"
+                rel="stylesheet"
+            />
         </Head>
     );
 };
@@ -76,7 +79,7 @@ export default function Show({ news }) {
                     <motion.h1 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="text-3xl md:text-5xl font-serif font-extralight leading-[1.3] text-slate-950 mb-12"
+                        className="text-2xl md:text-4xl leading-[1.3] text-slate-950 mb-12"
                     >
                         {news.title}
                     </motion.h1>
@@ -132,7 +135,7 @@ export default function Show({ news }) {
             <footer className="py-12 flex flex-col items-center gap-4 bg-slate-50/30 border-t border-slate-50">
                 <div className="text-xl font-serif italic text-slate-200">EverStreak</div>
                 <p className="text-[8px] tracking-[0.8em] text-slate-400 font-medium uppercase ml-[0.8em]">
-                    © 2026 Connection defines value.
+                    © 2026 EverStreak Inc.
                 </p>
             </footer>
         </div>

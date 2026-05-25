@@ -440,21 +440,21 @@ export default function Welcome(props) {
 
                                         <div className="flex items-center gap-6 min-w-[150px]">
 
-                                            <span className="text-[15px] font-light text-slate-400 font-mono tracking-tighter">
+                                            <span className="text-[15px] font-light text-slate-600 font-mono tracking-tighter">
                                                 {item.published_at
                                                     ? item.published_at.substring(0, 10).replace(/-/g, '.')
                                                     : '----.--.--'}
                                             </span>
 
                                             <span
-                                                className="text-[13px] px-2 py-0.5 border border-slate-200 text-slate-400 tracking-widest font-bold group-hover:border-[#c46a3a] group-hover:text-[#ff6b00] transition-colors"
+                                                className="text-[13px] px-2 py-0.5 border border-slate-400 text-slate-500 tracking-widest font-bold group-hover:border-[#c46a3a] group-hover:text-[#ff6b00] transition-colors"
                                             >
                                                 {categoryNames[item.category?.toLowerCase()] || item.category || 'INFO'}
                                             </span>
 
                                         </div>
 
-                                        <h3 className="text-[18px] md:text-[20px] font-light text-slate-600 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">
+                                        <h3 className="text-[18px] md:text-[20px] text-slate-800 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">
                                             {item.title}
                                         </h3>
 
