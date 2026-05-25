@@ -48,7 +48,7 @@ export default function About() {
         },
         {
             label: "設立",
-            value: "2025年12月"
+            value: "2023年8月10日"
         },
         {
             label: "事業内容",

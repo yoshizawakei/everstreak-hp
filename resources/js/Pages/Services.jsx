@@ -55,7 +55,9 @@ export default function Services() {
                 "進行ディレクション",
                 "スタッフキャスティング",
                 "マニュアル作成"
-            ]
+            ],
+
+            img: "https://images.unsplash.com/photo-1511578314322-379afb476865?q=80&w=1200"
         },
 
         {
@@ -69,11 +71,13 @@ export default function Services() {
                 "空間の空気は、言葉ひとつで変わります。イベントの温度感や参加者の感情を読み取りながら、その場に最も自然なコミュニケーションを届けます。",
 
             features: [
-                "式典・パーティー司会",
+                "各種イベント・式典・パーティー司会",
                 "バイリンガル対応（応相談）",
                 "ナレーション",
                 "台本作成サポート"
-            ]
+            ],
+
+            img: "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?q=80&w=1200"
         },
 
         {
@@ -91,7 +95,9 @@ export default function Services() {
                 "UI/UXデザイン",
                 "継続的な保守運用",
                 "SEO・マーケティング支援"
-            ]
+            ],
+
+            img: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1200"
         }
     ];
 
@@ -245,7 +251,7 @@ export default function Services() {
 
                                         <div className="w-full h-full bg-gradient-to-br from-slate-200 to-slate-50 flex items-center justify-center text-slate-300 text-sm md:text-base tracking-[0.08em]">
 
-                                            {service.title}
+                                            <img src={service.img} alt={service.title} />
 
                                         </div>
 
