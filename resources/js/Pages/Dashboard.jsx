@@ -31,7 +31,7 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
             label: 'System Status', 
             value: 'Active', 
             icon: <TrendingUp size={20} />, 
-            href: route('dashboard'), // リロードするように設定
+            href: route('dashboard'), 
             color: 'bg-orange-50 text-[#ff6b00]' 
         },
     ];
@@ -41,7 +41,7 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
             header={
                 <div className="flex items-center gap-3">
                     <LayoutDashboard className="text-slate-400" size={24} />
-                    <h2 className="text-2xl font-serif text-slate-900 tracking-tight">
+                    <h2 className="text-xl sm:text-2xl font-serif text-slate-900 tracking-tight">
                         Dashboard
                     </h2>
                 </div>
@@ -49,27 +49,27 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
         >
             <Head title="Dashboard" />
 
-            <div className="py-12 bg-slate-50 min-h-screen">
-                <div className="mx-auto max-w-7xl px-6 lg:px-8">
+            <div className="py-6 sm:py-12 bg-slate-50 min-h-screen">
+                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     
                     {/* Welcome Section */}
                     <motion.div 
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="mb-10 bg-slate-900 rounded-[40px] p-10 text-white relative overflow-hidden shadow-2xl shadow-slate-200"
+                        className="mb-6 sm:mb-10 bg-slate-900 rounded-3xl sm:rounded-[40px] p-6 sm:p-10 text-white relative overflow-hidden shadow-2xl shadow-slate-200"
                     >
                         <div className="relative z-10">
                             <span className="text-[10px] uppercase tracking-[0.4em] font-bold text-slate-400">Welcome back</span>
-                            <h3 className="text-3xl font-serif italic mt-2">Hello, {auth.user.name}</h3>
-                            <p className="text-slate-400 text-sm mt-4 max-w-md font-light leading-relaxed">
+                            <h3 className="text-2xl sm:text-3xl font-serif italic mt-2">Hello, {auth.user.name}</h3>
+                            <p className="text-slate-400 text-xs sm:text-sm mt-3 sm:mt-4 max-w-md font-light leading-relaxed">
                                 EverStreakの管理システムへようこそ。
                                 今日も新しい価値を残していきましょう。
                             </p>
-                            <div className="mt-8 flex gap-4">
+                            <div className="mt-6 sm:mt-8 flex gap-4">
                                 <Link 
                                     href="/" 
                                     target="_blank"
-                                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-6 py-3 rounded-full text-xs font-bold transition-all backdrop-blur-md"
+                                    className="flex items-center gap-2 bg-white/10 hover:bg-white/20 px-5 sm:px-6 py-2.5 sm:py-3 rounded-full text-xs font-bold transition-all backdrop-blur-md"
                                 >
                                     <ExternalLink size={14} /> View Site
                                 </Link>
@@ -78,8 +78,8 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
                         <div className="absolute top-[-20%] right-[-5%] w-64 h-64 bg-[#ff6b00] rounded-full blur-[100px] opacity-20"></div>
                     </motion.div>
 
-                    {/* Stats Grid - 全体をLinkに変更 */}
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+                    {/* Stats Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-6 sm:mb-10">
                         {stats.map((stat, index) => (
                             <motion.div
                                 key={stat.label}
@@ -89,7 +89,7 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
                             >
                                 <Link 
                                     href={stat.href}
-                                    className="bg-white p-8 rounded-[32px] border border-slate-200 shadow-sm hover:shadow-md transition-all group block h-full"
+                                    className="bg-white p-6 sm:p-8 rounded-2xl sm:rounded-[32px] border border-slate-200 shadow-sm hover:shadow-md transition-all group block h-full"
                                 >
                                     <div className="flex justify-between items-start mb-4">
                                         <div className={`p-3 rounded-2xl ${stat.color}`}>
@@ -100,45 +100,45 @@ export default function Dashboard({ auth, newsCount, messageCount }) {
                                         </div>
                                     </div>
                                     <div className="text-[10px] uppercase tracking-widest text-slate-400 font-bold mb-1">{stat.label}</div>
-                                    <div className="text-3xl font-serif text-slate-900">{stat.value}</div>
+                                    <div className="text-2xl sm:text-3xl font-serif text-slate-900">{stat.value}</div>
                                 </Link>
                             </motion.div>
                         ))}
                     </div>
 
-                    {/* Quick Actions */}
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm">
-                            <h4 className="text-lg font-serif mb-6 flex items-center gap-2 text-slate-900">
+                    {/* Quick Actions & Message Card */}
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
+                        <div className="bg-white rounded-2xl sm:rounded-[32px] border border-slate-200 p-6 sm:p-8 shadow-sm">
+                            <h4 className="text-base sm:text-lg font-serif mb-4 sm:mb-6 flex items-center gap-2 text-slate-900">
                                 <Settings size={18} className="text-slate-400" /> Quick Actions
                             </h4>
-                            <div className="grid grid-cols-2 gap-4">
+                            {/* スマホでは1列、PCでは2列 */}
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                 <Link 
                                     href={route('admin.news.create')}
-                                    className="p-6 bg-slate-50 rounded-2xl hover:bg-[#ff6b00] hover:text-white transition-all group"
+                                    className="p-5 bg-slate-50 rounded-2xl hover:bg-[#ff6b00] hover:text-white transition-all group"
                                 >
-                                    <Newspaper className="mb-3 text-slate-400 group-hover:text-white" />
+                                    <Newspaper className="mb-2 text-slate-400 group-hover:text-white" />
                                     <div className="text-sm font-bold">Post News</div>
                                     <div className="text-[10px] opacity-60 mt-1">お知らせを新規投稿</div>
                                 </Link>
                                 <Link 
                                     href={route('profile.edit')}
-                                    className="p-6 bg-slate-50 rounded-2xl hover:bg-slate-900 hover:text-white transition-all group"
+                                    className="p-5 bg-slate-50 rounded-2xl hover:bg-slate-900 hover:text-white transition-all group"
                                 >
-                                    <Settings className="mb-3 text-slate-400 group-hover:text-white" />
+                                    <Settings className="mb-2 text-slate-400 group-hover:text-white" />
                                     <div className="text-sm font-bold">Profile Settings</div>
                                     <div className="text-[10px] opacity-60 mt-1">アカウント設定の変更</div>
                                 </Link>
                             </div>
                         </div>
 
-                        {/* メッセージカード全体もLinkで包むとより使いやすくなります */}
                         <Link 
                             href={route('admin.contacts.index')}
-                            className="bg-white rounded-[32px] border border-slate-200 p-8 shadow-sm flex flex-col items-center justify-center text-center hover:bg-slate-50 transition-all group"
+                            className="bg-white rounded-2xl sm:rounded-[32px] border border-slate-200 p-6 sm:p-8 shadow-sm flex flex-col items-center justify-center text-center hover:bg-slate-50 transition-all group py-8 lg:py-0"
                         >
-                            <div className="w-16 h-16 bg-slate-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-white transition-all">
-                                <Mail size={24} className="text-slate-300 group-hover:text-emerald-500" />
+                            <div className="w-14 h-14 bg-slate-50 rounded-full flex items-center justify-center mb-4 group-hover:bg-white transition-all">
+                                <Mail size={22} className="text-slate-300 group-hover:text-emerald-500" />
                             </div>
                             <h4 className="text-sm font-bold text-slate-900">
                                 {messageCount > 0 ? `${messageCount}件の未読メッセージ` : 'No New Messages'}

@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\AdminNewsController;
 use App\Http\Controllers\Admin\AdminContactController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\WelcomeController;
 use App\Http\Controllers\NewsController;
 use Illuminate\Foundation\Application;
@@ -68,3 +69,5 @@ Route::get('/services', function () {
 });
 
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');
+
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);

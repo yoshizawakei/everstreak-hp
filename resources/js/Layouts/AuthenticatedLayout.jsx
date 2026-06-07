@@ -4,7 +4,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
-import { LayoutDashboard, Newspaper, Mail } from 'lucide-react';
+import { LayoutDashboard, Newspaper, Mail, LogOut, User, Globe } from 'lucide-react';
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user;
@@ -15,8 +15,8 @@ export default function AuthenticatedLayout({ header, children }) {
             <nav className="border-b border-slate-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
-                        <div className="flex">
-                            {/* ロゴ: クリックでダッシュボードに戻るように設定 */}
+                        <div className="flex w-full sm:w-auto justify-between sm:justify-start">
+                            {/* ロゴ */}
                             <div className="flex shrink-0 items-center">
                                 <Link href={route('dashboard')} className="flex items-center gap-2 group">
                                     <div className="p-2 bg-slate-900 rounded-lg group-hover:bg-[#ff6b00] transition-colors">
@@ -26,7 +26,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </Link>
                             </div>
 
-                            {/* メインナビゲーション */}
+                            {/* PC用メインナビゲーション */}
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     <div className="flex items-center gap-2">
@@ -46,7 +46,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             </div>
                         </div>
 
-                        {/* ユーザーメニュー */}
+                        {/* PC用ユーザーメニュー */}
                         <div className="hidden sm:ms-6 sm:flex sm:items-center">
                             <div className="relative ms-3">
                                 <Dropdown>
@@ -83,18 +83,47 @@ export default function AuthenticatedLayout({ header, children }) {
                 </div>
 
                 {/* モバイルメニュー */}
-                <div className={(showingNavigationDropdown ? 'block' : 'hidden') + ' sm:hidden'}>
-                    <div className="space-y-1 pb-3 pt-2">
-                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>Dashboard</ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('admin.news.index')} active={route().current('admin.news.*')}>News</ResponsiveNavLink>
-                        <ResponsiveNavLink href={route('admin.contacts.index')} active={route().current('admin.contacts.*')}>Messages</ResponsiveNavLink>
+                <div className={`${showingNavigationDropdown ? 'block' : 'hidden'} sm:hidden bg-white border-b border-slate-200`}>
+                    <div className="space-y-1 pb-3 pt-2 px-2">
+                        <ResponsiveNavLink href={route('dashboard')} active={route().current('dashboard')}>
+                            <div className="flex items-center gap-2"><LayoutDashboard size={16} /> Dashboard</div>
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('admin.news.index')} active={route().current('admin.news.*')}>
+                            <div className="flex items-center gap-2"><Newspaper size={16} /> News</div>
+                        </ResponsiveNavLink>
+                        <ResponsiveNavLink href={route('admin.contacts.index')} active={route().current('admin.contacts.*')}>
+                            <div className="flex items-center gap-2"><Mail size={16} /> Messages</div>
+                        </ResponsiveNavLink>
+                    </div>
+                    {/* モバイル用ユーザー情報・アクションエリア */}
+                    <div className="border-t border-slate-200 pb-3 pt-4 px-4 bg-slate-50/50">
+                        <div className="flex items-center px-2 mb-3">
+                            <div className="bg-slate-200 p-1.5 rounded-full text-slate-600 mr-2">
+                                <User size={16} />
+                            </div>
+                            <div>
+                                <div className="text-sm font-medium text-slate-800">{user.name}</div>
+                                <div className="text-xs text-slate-500">{user.email}</div>
+                            </div>
+                        </div>
+                        <div className="mt-3 space-y-1">
+                            <ResponsiveNavLink href={route('profile.edit')}>
+                                <div className="flex items-center gap-2 text-slate-600"><User size={16} /> Profile Settings</div>
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink href="/" target="_blank">
+                                <div className="flex items-center gap-2 text-slate-600"><Globe size={16} /> View Live Site</div>
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink href={route('logout')} method="post" as="button">
+                                <div className="flex items-center gap-2 text-red-600"><LogOut size={16} /> Log Out</div>
+                            </ResponsiveNavLink>
+                        </div>
                     </div>
                 </div>
             </nav>
 
             {header && (
                 <header className="bg-white">
-                    <div className="mx-auto max-w-7xl px-6 py-8">
+                    <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 sm:py-8">
                         {header}
                     </div>
                 </header>
