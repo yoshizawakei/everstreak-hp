@@ -10,24 +10,24 @@ import {
 
 // --- SEO ---
 const Seo = ({ title, description }) => {
-
     const siteName = "株式会社EverStreak";
-
-    const fullTitle = title
-        ? `${title} | ${siteName}`
-        : siteName;
-
-    const defaultDesc =
-        "ひとつの出会いが、景色を変えていく。EverStreakは、イベント企画、司会、Web制作を通して、人と人とのつながりから新しい価値を創造します。";
+    const fullTitle = title ? `${title} | ${siteName}` : siteName;
+    const defaultDesc = "ひとつの出会いが、景色を変えていく。EverStreakは、イベント企画、司会、Web制作を通して、人と人とのつながりから新しい価値を創造します。";
+    const desc = description || defaultDesc;
 
     return (
         <Head>
             <title>{fullTitle}</title>
+            <meta name="description" content={desc} />
 
-            <meta
-                name="description"
-                content={description || defaultDesc}
-            />
+            <meta property="og:title" content={fullTitle} />
+            <meta property="og:description" content={desc} />
+            <meta property="og:type" content="website" />
+            <meta property="og:site_name" content={siteName} />
+
+            <meta name="twitter:card" content="summary" />
+            <meta name="twitter:title" content={fullTitle} />
+            <meta name="twitter:description" content={desc} />
 
             <link
                 href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@200;500&display=swap"

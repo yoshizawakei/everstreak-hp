@@ -20,7 +20,9 @@ use Inertia\Inertia;
 Route::get('/', [WelcomeController::class, 'index'])->name('welcome');
 
 // お問い合わせの送信処理
-Route::post('/contact', [WelcomeController::class, 'storeContact'])->name('contact.store');
+Route::post('/contact', [WelcomeController::class, 'storeContact'])
+    ->middleware('throttle:5,1')
+    ->name('contact.store');
 
 // ダッシュボード（ログイン後）
 Route::get('/dashboard', function () {
@@ -32,6 +34,7 @@ Route::get('/dashboard', function () {
 
 Route::get('/about', fn() => Inertia::render('About'))->name('about');
 Route::get('/services', fn() => Inertia::render('Services'))->name('services');
+
 
 // プロフィール編集（ログイン必須）
 Route::middleware('auth')->group(function () {
@@ -58,14 +61,6 @@ Route::prefix('admin')->name('admin.')->middleware(['auth'])->group(function () 
     Route::patch('/contacts/{contact}/toggle', [AdminContactController::class, 'toggleReplied'])->name('contacts.toggle-replied');
     Route::delete('/contacts/{contact}', [AdminContactController::class, 'destroy'])->name('contacts.destroy');
 
-});
-
-Route::get('/about', function () {
-    return Inertia::render('About');
-});
-
-Route::get('/services', function () {
-    return Inertia::render('Services');
 });
 
 Route::get('/news/{news}', [NewsController::class, 'show'])->name('news.show');

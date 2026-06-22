@@ -18,8 +18,7 @@ class WelcomeController extends Controller
     {
         // 修正ポイント：条件をシンプルにして、確実にデータが届くか確認する
         $news = News::where('is_published', true)
-            // デバッグ期間中は一旦コメントアウトするか、日付のみで比較する
-            // ->where('published_at', '<=', now()) 
+            ->where('published_at', '<=', now())
             ->latest('published_at')
             ->take(5)
             ->get();

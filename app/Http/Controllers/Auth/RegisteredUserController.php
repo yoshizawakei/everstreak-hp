@@ -37,7 +37,7 @@ class RegisteredUserController extends Controller
             'invitation_code' => [
                 'required',
                 function ($attribute, $value, $fail) {
-                    if ($value !== 'EverStreak2026') {
+                    if ($value !== env('INVITATION_CODE')) {
                         $fail('招待コードが正しくありません。');
                     }
                 }
