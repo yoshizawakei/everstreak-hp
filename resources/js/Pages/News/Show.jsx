@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Head, Link } from '@inertiajs/react';
 import { ArrowLeft, Clock, Tag } from 'lucide-react';
+import FloatingContactButton from '@/Components/FloatingContactButton';
 
 // --- SEO ---
 const Seo = ({ title, description, image }) => {
@@ -57,9 +58,18 @@ export default function Show({ news }) {
                 <Link href="/" className="text-xl md:text-2xl font-serif italic tracking-tighter hover:opacity-70 transition-opacity">
                     EverStreak
                 </Link>
-                <Link 
-                    href="/#news" 
-                    className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 hover:text-[#ff6b00] transition-colors"
+
+                <nav className="hidden md:flex items-center gap-10 text-[9px] uppercase tracking-[0.2em] font-bold text-slate-400">
+                    <Link href="/" className="hover:text-[#ff6b00] transition-colors">Home</Link>
+                    <Link href="/about" className="hover:text-[#ff6b00] transition-colors">About</Link>
+                    <Link href="/services" className="hover:text-[#ff6b00] transition-colors">Services</Link>
+                    <Link href="/#news" className="hover:text-[#ff6b00] transition-colors">News</Link>
+                    <Link href="/#contact" className="hover:text-[#ff6b00] transition-colors">Contact</Link>
+                </nav>
+
+                <Link
+                    href="/#news"
+                    className="flex md:hidden items-center gap-2 text-[10px] uppercase tracking-[0.2em] font-bold text-slate-400 hover:text-[#ff6b00] transition-colors"
                 >
                     <ArrowLeft className="w-3 h-3" /> Back to News
                 </Link>
@@ -139,6 +149,8 @@ export default function Show({ news }) {
                     </motion.div>
                 </article>
             </main>
+
+            <FloatingContactButton />
 
             <footer className="py-12 flex flex-col items-center gap-4 bg-slate-50/30 border-t border-slate-50">
                 <div className="text-xl font-serif italic text-slate-200">EverStreak</div>

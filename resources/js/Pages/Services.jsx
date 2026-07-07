@@ -5,13 +5,16 @@ import {
     CheckCircle2,
     Mic2,
     Calendar,
-    Code2
+    Code2,
+    Users,
+    MapPin
 } from 'lucide-react';
+import FloatingContactButton from '@/Components/FloatingContactButton';
 
 const Seo = ({ title, description }) => {
     const siteName = "株式会社EverStreak";
     const fullTitle = title ? `${title} | ${siteName}` : siteName;
-    const defaultDesc = "ひとつの出会いが、景色を変えていく。EverStreakは、イベント企画、司会、Web制作を通して、人と人とのつながりから新しい価値を創造します。";
+    const defaultDesc = "株式会社EverStreak（エバーストリーク）は、関東全域でイベント企画、司会・MC、Web制作を通して、人と人とのつながりから新しい価値を創造します。";
     const desc = description || defaultDesc;
 
     return (
@@ -54,7 +57,9 @@ export default function Services() {
                 "コンセプト設計",
                 "進行ディレクション",
                 "スタッフキャスティング",
-                "マニュアル作成"
+                "マニュアル作成",
+                "対応規模：〜数百名規模",
+                "対応エリア：関東全域"
             ],
             img: "/images/event.jpg"
         },
@@ -99,7 +104,7 @@ export default function Services() {
 
             <Seo
                 title="事業内容・サービス一覧"
-                description="イベント企画・運営から司会者派遣、LaravelによるWebシステム開発まで。EverStreakは、人と人とのつながりから、新しい価値を創造します。"
+                description="株式会社EverStreak（エバーストリーク）のサービス一覧。関東全域でイベント企画・運営、司会・MC派遣、LaravelによるWebシステム開発まで、10名規模から数百名規模のイベントに対応します。"
             />
 
             <header className="fixed top-0 w-full z-50 px-6 py-5 md:px-10 flex justify-between items-center backdrop-blur-md bg-white/80 border-b border-slate-900/5">
@@ -111,9 +116,20 @@ export default function Services() {
                     EverStreak
                 </Link>
 
+                <nav
+                    className="hidden md:flex items-center gap-10 text-[9px] uppercase tracking-[0.2em] font-medium text-slate-400"
+                    style={{ fontFamily: "'Inter', 'Noto Sans JP', sans-serif" }}
+                >
+                    <Link href="/" className="hover:text-[#ff6b00] transition-colors">Home</Link>
+                    <Link href="/about" className="hover:text-[#ff6b00] transition-colors">About</Link>
+                    <Link href="/services" className="hover:text-[#ff6b00] transition-colors">Services</Link>
+                    <Link href="/#news" className="hover:text-[#ff6b00] transition-colors">News</Link>
+                    <Link href="/#contact" className="hover:text-[#ff6b00] transition-colors">Contact</Link>
+                </nav>
+
                 <Link
                     href="/"
-                    className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-medium text-slate-400 hover:text-slate-900 transition-colors"
+                    className="group flex md:hidden items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-medium text-slate-400 hover:text-slate-900 transition-colors"
                 >
                     <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
                     Back to Home
@@ -145,6 +161,36 @@ export default function Services() {
                         デジタルクリエイティブという異なる領域を横断しながら、
                         人と人が自然につながる体験を設計します。
                     </p>
+
+                    <div className="flex flex-wrap gap-8 md:gap-14 mt-14 pt-10 border-t border-slate-100">
+                        <div className="flex items-start gap-4">
+                            <div className="p-3 bg-[#ff6b00]/5 rounded-xl text-[#ff6b00] shrink-0">
+                                <Users className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-slate-400 mb-2">
+                                    対応規模
+                                </p>
+                                <p className="text-slate-700 font-light">
+                                    10名程度の小規模な交流会から、数百名規模の大型イベントまで対応
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="flex items-start gap-4">
+                            <div className="p-3 bg-[#ff6b00]/5 rounded-xl text-[#ff6b00] shrink-0">
+                                <MapPin className="w-5 h-5" />
+                            </div>
+                            <div>
+                                <p className="text-[10px] uppercase tracking-[0.25em] font-semibold text-slate-400 mb-2">
+                                    対応エリア
+                                </p>
+                                <p className="text-slate-700 font-light">
+                                    関東全域（東京・神奈川・埼玉・千葉 ほか）
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                 </motion.div>
 
                 <div className="grid grid-cols-1 gap-20 md:gap-28">
@@ -211,6 +257,8 @@ export default function Services() {
                 </div>
 
             </main>
+
+            <FloatingContactButton />
 
             <footer className="py-16 px-6 md:px-[10vw] border-t border-slate-100 bg-slate-50/50">
                 <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-10">

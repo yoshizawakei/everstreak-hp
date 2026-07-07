@@ -1,11 +1,12 @@
 import { Head, Link } from '@inertiajs/react';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import FloatingContactButton from '@/Components/FloatingContactButton';
 
 const Seo = ({ title, description }) => {
     const siteName = "株式会社EverStreak";
     const fullTitle = title ? `${title} | ${siteName}` : siteName;
-    const defaultDesc = "ひとつの出会いが、景色を変えていく。EverStreakは、人と人とのつながりから、新しい価値を創造するクリエイティブチームです。";
+    const defaultDesc = "株式会社EverStreak（エバーストリーク）の会社概要。東京・渋谷を拠点に、イベント企画・運営、司会・MC、Web制作を通じて関東全域で新しい価値を創造するクリエイティブチームです。";
     const desc = description || defaultDesc;
 
     return (
@@ -37,11 +38,12 @@ const Seo = ({ title, description }) => {
 export default function About() {
 
     const companyInfo = [
-        { label: "会社名", value: "株式会社EverStreak" },
+        { label: "会社名", value: "株式会社EverStreak（エバーストリーク）" },
         { label: "代表取締役", value: "大脇 拓仁" },
         { label: "所在地", value: "〒150-0012 東京都渋谷区広尾1-2-1 ヒカリビル4階" },
         { label: "設立", value: "2023年8月10日" },
-        { label: "事業内容", value: "イベント企画・運営、司会・MC、WEB制作・管理" }
+        { label: "事業内容", value: "イベント企画・運営、司会・MC、WEB制作・管理" },
+        { label: "対応エリア", value: "関東全域（東京・神奈川・埼玉・千葉 ほか）" }
     ];
 
     return (
@@ -62,9 +64,20 @@ export default function About() {
                     EverStreak
                 </Link>
 
+                <nav
+                    className="hidden md:flex items-center gap-10 text-[9px] uppercase tracking-[0.2em] font-medium text-slate-400"
+                    style={{ fontFamily: "'Inter', 'Noto Sans JP', sans-serif" }}
+                >
+                    <Link href="/" className="hover:text-[#ff6b00] transition-colors">Home</Link>
+                    <Link href="/about" className="hover:text-[#ff6b00] transition-colors">About</Link>
+                    <Link href="/services" className="hover:text-[#ff6b00] transition-colors">Services</Link>
+                    <Link href="/#news" className="hover:text-[#ff6b00] transition-colors">News</Link>
+                    <Link href="/#contact" className="hover:text-[#ff6b00] transition-colors">Contact</Link>
+                </nav>
+
                 <Link
                     href="/"
-                    className="group flex items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-medium text-slate-400 hover:text-slate-900 transition-colors"
+                    className="group flex md:hidden items-center gap-2 text-[10px] uppercase tracking-[0.25em] font-medium text-slate-400 hover:text-slate-900 transition-colors"
                 >
                     <ArrowLeft className="w-3 h-3 group-hover:-translate-x-1 transition-transform" />
                     Back to Home
@@ -129,7 +142,7 @@ export default function About() {
                                 「この人と一緒に何かやりたい」—— そう思える出会いが、世界を少しずつ変えていくと信じています。
                             </p>
                             <p>
-                                EverStreakは、人が本音で語り合える場をつくり、そこから生まれるエネルギーを社会に向けて解き放つことを使命としています。イベント、言葉、デジタルという三つの接点を通じて、まだ誰も見たことのない価値を、ともに創り上げていきたいと思います。
+                                EverStreak（エバーストリーク）は、人が本音で語り合える場をつくり、そこから生まれるエネルギーを社会に向けて解き放つことを使命としています。イベント、言葉、デジタルという三つの接点を通じて、まだ誰も見たことのない価値を、ともに創り上げていきたいと思います。
                             </p>
                             <p
                                 className="text-slate-400 text-sm tracking-[0.15em] pt-2"
@@ -168,6 +181,8 @@ export default function About() {
                 </section>
 
             </main>
+
+            <FloatingContactButton />
 
             <footer className="py-16 px-6 md:px-[10vw] border-t border-slate-100 bg-slate-50/50">
                 <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center md:items-start justify-between gap-10">

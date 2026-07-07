@@ -3,6 +3,7 @@ import { motion, useScroll, useTransform, useSpring, AnimatePresence, useMotionV
 import { Head, Link, useForm } from '@inertiajs/react';
 import { useRef, useState, useEffect } from 'react';
 import { Menu, X, Send, Mail, ArrowUpRight } from 'lucide-react';
+import FloatingContactButton from '@/Components/FloatingContactButton';
 
 const LineIcon = ({ className }) => (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -16,8 +17,27 @@ let hasPlayedAnimation = false;
 const Seo = ({ title, description }) => {
     const siteName = "株式会社EverStreak";
     const fullTitle = title ? `${title} | ${siteName}` : siteName;
-    const defaultDesc = "ひとつの出会いが、景色を変えていく。EverStreakは、人と人とのつながりから、新しい価値を創造するクリエイティブチームです。";
+    const defaultDesc = "株式会社EverStreak（エバーストリーク）は、東京・渋谷を拠点に関東全域でイベント企画・運営、司会・MC、Web制作を手がけるクリエイティブチーム。人と人とのつながりから、新しい価値を創造します。";
     const desc = description || defaultDesc;
+
+    const organizationJsonLd = {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "株式会社EverStreak",
+        "alternateName": ["エバーストリーク", "EverStreak"],
+        "url": "https://everstreak.co.jp",
+        "description": defaultDesc,
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "広尾1-2-1 ヒカリビル4階",
+            "addressLocality": "渋谷区",
+            "addressRegion": "東京都",
+            "postalCode": "150-0012",
+            "addressCountry": "JP"
+        },
+        "areaServed": "関東地方",
+        "sameAs": ["https://line.me/ti/p/@394hzlmj"]
+    };
 
     return (
         <Head>
@@ -41,6 +61,10 @@ const Seo = ({ title, description }) => {
                 href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Sans+JP:wght@300;400;500&family=Noto+Serif+JP:wght@200;500&display=swap"
                 rel="stylesheet"
             />
+
+            <script type="application/ld+json">
+                {JSON.stringify(organizationJsonLd)}
+            </script>
         </Head>
     );
 };
@@ -209,7 +233,7 @@ export default function Welcome(props) {
 
             <Seo
                 title="ひとつの出会いが、景色を変えていく"
-                description="EverStreakは、人と人とのつながりから、新しい価値を創造するクリエイティブチームです。"
+                description="株式会社EverStreak（エバーストリーク）は、東京・渋谷を拠点に関東全域でイベント企画・運営、司会・MC、Web制作を手がけるクリエイティブチーム。人と人とのつながりから、新しい価値を創造します。"
             />
 
             <motion.header
@@ -370,22 +394,22 @@ export default function Welcome(props) {
                                         href={`/news/${item.id}`}
                                         className="group flex flex-col md:flex-row md:items-center py-6 md:py-8 gap-3 md:gap-12 cursor-pointer relative"
                                     >
-                                        <div className="flex items-center gap-6 min-w-[150px]">
-                                            <span className="text-[15px] font-light text-slate-600 font-mono tracking-tighter">
+                                        <div className="flex items-center gap-6 md:min-w-[150px] md:shrink-0">
+                                            <span className="text-[15px] font-light text-slate-600 font-mono tracking-tighter whitespace-nowrap shrink-0">
                                                 {item.published_at
                                                     ? item.published_at.substring(0, 10).replace(/-/g, '.')
                                                     : '----.--.--'}
                                             </span>
-                                            <span className="text-[13px] px-2 py-0.5 border border-slate-400 text-slate-500 tracking-widest font-bold group-hover:border-[#c46a3a] group-hover:text-[#ff6b00] transition-colors">
+                                            <span className="text-[13px] px-2 py-0.5 border border-slate-400 text-slate-500 tracking-widest font-bold whitespace-nowrap shrink-0 group-hover:border-[#c46a3a] group-hover:text-[#ff6b00] transition-colors">
                                                 {categoryNames[item.category?.toLowerCase()] || item.category || 'INFO'}
                                             </span>
                                         </div>
 
-                                        <h3 className="text-[18px] md:text-[20px] text-slate-800 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">
+                                        <h3 className="min-w-0 md:flex-1 text-[18px] md:text-[20px] text-slate-800 group-hover:text-slate-900 group-hover:translate-x-1 transition-all duration-500">
                                             {item.title}
                                         </h3>
 
-                                        <ArrowUpRight className="hidden md:block ml-auto w-4 h-4 text-slate-200 group-hover:text-[#ff6b00] transition-colors" />
+                                        <ArrowUpRight className="hidden md:block ml-auto w-4 h-4 shrink-0 text-slate-200 group-hover:text-[#ff6b00] transition-colors" />
                                     </Link>
                                 ))
                             ) : (
@@ -715,6 +739,8 @@ export default function Welcome(props) {
                     </motion.div>
                 )}
             </AnimatePresence>
+
+            <FloatingContactButton />
 
         </div>
     );

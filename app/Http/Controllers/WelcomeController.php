@@ -24,7 +24,11 @@ class WelcomeController extends Controller
             ->get();
 
         return Inertia::render('Welcome', [
-            'news' => $news
+            'news' => $news,
+            'seo' => [
+                'title' => 'ひとつの出会いが、景色を変えていく',
+                'description' => '株式会社EverStreak（エバーストリーク）は、東京・渋谷を拠点に関東全域でイベント企画・運営、司会・MC、Web制作を手がけるクリエイティブチーム。人と人とのつながりから、新しい価値を創造します。',
+            ],
         ]);
     }
 

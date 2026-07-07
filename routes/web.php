@@ -32,8 +32,19 @@ Route::get('/dashboard', function () {
     ]);
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/about', fn() => Inertia::render('About'))->name('about');
-Route::get('/services', fn() => Inertia::render('Services'))->name('services');
+Route::get('/about', fn() => Inertia::render('About', [
+    'seo' => [
+        'title' => '会社概要',
+        'description' => '株式会社EverStreak（エバーストリーク）の会社概要。東京・渋谷を拠点に、イベント企画・運営、司会・MC、Web制作を通じて関東全域で新しい価値を創造するクリエイティブチームです。',
+    ],
+]))->name('about');
+
+Route::get('/services', fn() => Inertia::render('Services', [
+    'seo' => [
+        'title' => '事業内容・サービス一覧',
+        'description' => '株式会社EverStreak（エバーストリーク）のサービス一覧。関東全域でイベント企画・運営、司会・MC派遣、LaravelによるWebシステム開発まで、10名規模から数百名規模のイベントに対応します。',
+    ],
+]))->name('services');
 
 
 // プロフィール編集（ログイン必須）
