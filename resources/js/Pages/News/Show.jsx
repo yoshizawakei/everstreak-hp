@@ -59,7 +59,7 @@ export default function Show({ news }) {
                     EverStreak
                 </Link>
 
-                <nav className="hidden md:flex items-center gap-10 text-[9px] uppercase tracking-[0.2em] font-bold text-slate-400">
+                <nav className="hidden md:flex items-center gap-10 text-[11px] uppercase tracking-[0.2em] font-bold text-slate-600">
                     <Link href="/" className="hover:text-[#ff6b00] transition-colors">Home</Link>
                     <Link href="/about" className="hover:text-[#ff6b00] transition-colors">About</Link>
                     <Link href="/services" className="hover:text-[#ff6b00] transition-colors">Services</Link>

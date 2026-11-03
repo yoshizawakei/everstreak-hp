@@ -117,7 +117,7 @@ export default function Services() {
                 </Link>
 
                 <nav
-                    className="hidden md:flex items-center gap-10 text-[9px] uppercase tracking-[0.2em] font-medium text-slate-400"
+                    className="hidden md:flex items-center gap-10 text-[11px] uppercase tracking-[0.2em] font-semibold text-slate-600"
                     style={{ fontFamily: "'Inter', 'Noto Sans JP', sans-serif" }}
                 >
                     <Link href="/" className="hover:text-[#ff6b00] transition-colors">Home</Link>
